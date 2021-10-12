@@ -20,7 +20,7 @@
         "react"
     ],
     "rules": {
-        "complexity": ["error", 6]
+        "complexity": ["error", 8]
     },
     "settings": {
         "react": {
