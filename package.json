@@ -65,6 +65,7 @@
     "pre-commit": "^1.2.2"
   },
   "proxy": "http://localhost:8000",
+  "homepage": "/app",
   "lint-staged": {
     "*.js": "eslint"
   },
