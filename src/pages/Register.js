@@ -63,6 +63,11 @@ const Register = () => {
 			setResponseError('Las contraseñas no coinciden');
 			return;
 		}
+
+		const httpsAgent = new https.Agent({
+			rejectUnauthorized: false,
+		});
+
 		fetch(`${process.env.REACT_APP_API_URL}/register`, {
 			method: 'POST',
 			headers: {
@@ -74,6 +79,7 @@ const Register = () => {
 				username: values.usuario,
 				type: values.tipo.toLowerCase(),
 			}),
+			agent: httpsAgent,
 		})
 			.then((response) => response.json())
 			.then((response) => {
