@@ -19,6 +19,7 @@ import PublicForm from '../components/PublicForm';
 import MaterialIcon from 'material-icons-react';
 import Navbar from '../components/Navbar';
 import ResponseError from '../components/ResponseError';
+import * as https from 'https'; //ES 6
 
 const Register = () => {
 	const [values, setValues] = React.useState({
@@ -64,10 +65,6 @@ const Register = () => {
 			return;
 		}
 
-		const httpsAgent = new https.Agent({
-			rejectUnauthorized: false,
-		});
-
 		fetch(`${process.env.REACT_APP_API_URL}/register`, {
 			method: 'POST',
 			headers: {
@@ -79,7 +76,6 @@ const Register = () => {
 				username: values.usuario,
 				type: values.tipo.toLowerCase(),
 			}),
-			agent: httpsAgent,
 		})
 			.then((response) => response.json())
 			.then((response) => {
