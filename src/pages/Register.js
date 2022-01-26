@@ -19,7 +19,6 @@ import PublicForm from '../components/PublicForm';
 import MaterialIcon from 'material-icons-react';
 import Navbar from '../components/Navbar';
 import ResponseError from '../components/ResponseError';
-import * as https from 'https'; //ES 6
 
 const Register = () => {
 	const [values, setValues] = React.useState({
