@@ -84,6 +84,9 @@ const Register = () => {
 					// window.location.href = '/login';
 					setNextStep(true);
 				}
+			})
+			.catch((error) => {
+				setResponseError(error);
 			});
 	};
 

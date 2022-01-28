@@ -70,6 +70,9 @@ const Login = () => {
 						window.location.href = '/dashboardOrganizador';
 					}
 				}
+			})
+			.catch((error) => {
+				setResponseError(error);
 			});
 	};
 

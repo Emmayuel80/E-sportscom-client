@@ -45,6 +45,9 @@ const ForgotPassword = () => {
 				} else {
 					setSentEmail(true);
 				}
+			})
+			.catch((error) => {
+				setResponseError(error);
 			});
 	};
 

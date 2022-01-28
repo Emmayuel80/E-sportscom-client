@@ -21,6 +21,9 @@ const VerifyEmail = () => {
 				if (response.name) {
 					setResponseError(response.name);
 				}
+			})
+			.catch((error) => {
+				setResponseError(error);
 			});
 	};
 

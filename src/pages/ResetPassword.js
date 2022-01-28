@@ -62,6 +62,9 @@ const RestorePassword = () => {
 				} else {
 					setisUpdatedPassword(true);
 				}
+			})
+			.catch((error) => {
+				setResponseError(error);
 			});
 	};
 
@@ -72,7 +75,9 @@ const RestorePassword = () => {
 				{!isUpdatedPassword ? (
 					<Grid>
 						<Grid>
-							<Typography variant='h4' sx={{textAlign: 'center' }}>Restablecer contraseña.</Typography>
+							<Typography variant='h4' sx={{ textAlign: 'center' }}>
+								Restablecer contraseña.
+							</Typography>
 						</Grid>
 						<Grid sx={{ py: 2 }} item xs={12} md={12} lg={12}>
 							<FormControl fullWidth variant='outlined'>
