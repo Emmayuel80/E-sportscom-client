@@ -64,7 +64,7 @@ const RestorePassword = () => {
 				}
 			})
 			.catch((error) => {
-				setResponseError(error);
+				setResponseError(error.toString());
 			});
 	};
 

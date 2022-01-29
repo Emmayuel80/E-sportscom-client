@@ -47,7 +47,7 @@ const ForgotPassword = () => {
 				}
 			})
 			.catch((error) => {
-				setResponseError(error);
+				setResponseError(error.toString());
 			});
 	};
 
