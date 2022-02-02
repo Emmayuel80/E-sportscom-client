@@ -5,6 +5,8 @@ import {
 	IconButton,
 	ListItemIcon,
 	Menu,
+	Box,
+	Drawer,
 	MenuItem,
 } from '@mui/material';
 import verifyToken from '../services/verifyToken';
@@ -15,12 +17,19 @@ import OpcionesOrganizador from '../components/OpcionesOrganizador';
 import MaterialIcon from 'material-icons-react';
 import AvatarImg from '../pngegg.png';
 import Logout from '../services/logout';
+import PropTypes from 'prop-types';
 import DashboardOrganizadorInicio from '../components/DashboardOrganizador/DashboardOrganizadorInicio';
 
-const DashboardOrganizador = () => {
-	const { setUser, Component, changeComponent } = useContext(
-		DashboardOrganizadorContext
-	);
+const DashboardOrganizador = (props) => {
+	const { window } = props;
+	const {
+		setUser,
+		Component,
+		changeComponent,
+		user,
+		mobileOpen,
+		handleDrawerToggle,
+	} = useContext(DashboardOrganizadorContext);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
 	const handleClickMenu = (event) => {
@@ -32,23 +41,36 @@ const DashboardOrganizador = () => {
 
 	React.useEffect(() => {
 		// alert(localStorage.getItem('data'));
-		changeComponent(<DashboardOrganizadorInicio />);
 		verifyToken(setUser);
 	}, []);
+
+	React.useEffect(() => {
+		if (user !== {}) {
+			changeComponent(<DashboardOrganizadorInicio />);
+		}
+	}, [user]);
+	const container =
+		window !== undefined ? () => window().document.body : undefined;
 	return (
-		<Grid container sx={{ minHeight: '100vh' }}>
-			<Navbar>
-				<IconButton
-					onClick={handleClickMenu}
-					size='small'
-					sx={{ pl: 2 }}
-					aria-controls={open ? 'account-menu' : undefined}
-					aria-haspopup='true'
-					aria-expanded={open ? 'true' : undefined}>
-					<Avatar src={AvatarImg} />
-				</IconButton>
-			</Navbar>
-			<Grid container>
+		<Box sx={{ display: 'flex' }}>
+			<Box
+				component='nav'
+				sx={{
+					width: { xs: '0', sm: '0', lg: `240px` },
+					flexShrink: { lg: 0 },
+				}}
+				aria-label='mailbox folders'>
+				<Navbar handleDrawerToggle={handleDrawerToggle}>
+					<IconButton
+						onClick={handleClickMenu}
+						size='small'
+						sx={{ pl: 2 }}
+						aria-controls={open ? 'account-menu' : undefined}
+						aria-haspopup='true'
+						aria-expanded={open ? 'true' : undefined}>
+						<Avatar src={AvatarImg} />
+					</IconButton>
+				</Navbar>
 				<Menu
 					anchorEl={anchorEl}
 					id='account-menu'
@@ -101,28 +123,56 @@ const DashboardOrganizador = () => {
 						Cerrar Sesión
 					</MenuItem>
 				</Menu>
-				<Grid
-					item
-					xs={2}
+				<Drawer
+					container={container}
+					variant='temporary'
+					open={mobileOpen}
+					onClose={handleDrawerToggle}
+					ModalProps={{
+						keepMounted: true, // Better open performance on mobile.
+					}}
 					sx={{
-						boxSizing: 'border-box',
-						backgroundColor: '#2B6287',
-						py: 10,
+						display: { xs: 'block', sm: 'block', lg: 'none' },
+						'& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
 					}}>
 					<OpcionesOrganizador></OpcionesOrganizador>
+				</Drawer>
+				<Drawer
+					variant='permanent'
+					sx={{
+						display: { xs: 'none', sm: 'none', lg: 'block' },
+						'& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+					}}
+					open>
+					<OpcionesOrganizador></OpcionesOrganizador>
+				</Drawer>
+			</Box>
+			<Box
+				component='main'
+				sx={{
+					flexGrow: 1,
+					p: 3,
+					width: { md: '100vw', lg: `calc(100% - ${240}px)` },
+				}}>
+				<Grid container sx={{ minHeight: '100vh' }}>
+					<Grid item container justifyContent='center'>
+						<Grid
+							item
+							container
+							direction='column'
+							justifyContent='center'
+							xs={10}
+							sx={{ minHeight: '100vh', backgroundColor: '#28527A', py: 12 }}>
+							{Component}
+						</Grid>
+					</Grid>
 				</Grid>
-				<Grid
-					item
-					container
-					direction='column'
-					justifyContent='center'
-					xs={10}
-					sx={{ minHeight: '100vh', backgroundColor: '#28527A', py: 12 }}>
-					{Component}
-				</Grid>
-			</Grid>
-		</Grid>
+			</Box>
+		</Box>
 	);
+};
+DashboardOrganizador.propTypes = {
+	window: PropTypes.any,
 };
 
 export default DashboardOrganizador;

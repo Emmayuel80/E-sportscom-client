@@ -103,7 +103,7 @@ const Register = () => {
 		</Grid>
 	) : (
 		<Grid container sx={{ minHeight: '100vh' }}>
-			<Navbar></Navbar>
+			<Navbar isPublic={true}></Navbar>
 			<PublicForm padx={6} pady={10}>
 				<Grid item>
 					<Typography

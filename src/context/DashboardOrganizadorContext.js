@@ -7,10 +7,16 @@ const DashboardOrganizadorProvider = ({ children }) => {
 	const [user, setUser] = React.useState({});
 	const changeComponent = (Component) => {
 		setComponent(null);
+		setMobileOpen(false);
 		setComponent(Component);
 	};
+	const [mobileOpen, setMobileOpen] = React.useState(false);
 
-	const data = { Component, changeComponent, setUser, user };
+	const handleDrawerToggle = () => {
+	  setMobileOpen(!mobileOpen);
+	};  
+
+	const data = { Component, changeComponent, setUser, user, mobileOpen, setMobileOpen, handleDrawerToggle };
 
 	return (
 		<DashboardOrganizadorContext.Provider value={data}>

@@ -17,12 +17,13 @@ const PublicForm = ({ children, pady = 10, padx = 5, minWidth = '25%' }) => {
 				direction='column'
 				item>
 				<Grid
-					sx={{
+					sx={{						
 						backgroundColor: '#F4D160',
 						borderRadius: 5,
 						py: pady,
 						px: padx,
 						minWidth: minWidth,
+						boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)',
 					}}>
 					{children}
 				</Grid>
