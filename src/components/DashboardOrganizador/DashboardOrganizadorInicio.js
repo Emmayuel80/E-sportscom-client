@@ -156,8 +156,19 @@ const DashboardOrganizadorInicio = () => {
 									xs={12}
 									key={JSON.stringify(data.latestActivity) + index}>
 									<Typography variant='h6' sx={{ textAlign: 'left', px: 6 }}>
-										{register.fecha_modificacion} | {register.desc_modificacion}
+										{new Date(register.fecha_modificacion).toLocaleString()} |{' '}
+										{register.desc_modificacion
+											.split('\n')
+											.map((item, index) => {
+												return (
+													<Grid key={index}>
+														<Typography variant='span'> {item} </Typography>
+														<br />
+													</Grid>
+												);
+											})}
 									</Typography>
+									<br />
 								</Grid>
 							);
 						})
@@ -168,29 +179,57 @@ const DashboardOrganizadorInicio = () => {
 						</Typography>
 					)}
 				</Grid>
-				<Grid item sx={{ minWidth: '90%', backgroundColor: 'white' }}>
+				<Grid
+					item
+					sx={{
+						minWidth: '90%',
+						backgroundColor: 'rgba(255, 255, 255, 0)',
+						p: 5,
+						borderRadius: 5,
+					}}>
 					{data.torneosCreados && (
 						<Bar
 							options={{
+								responsive: true,
+
+								scales: {
+									y: {
+										grid: {
+											color: '#ffffff',
+										},
+										ticks: {
+											color: '#ffffff', // this here
+										},
+									},
+									x: {
+										ticks: {
+											color: '#ffffff', // this here
+										},
+										grid: {
+											color: '#ffffff',
+										},
+									},
+								},
 								plugins: {
 									legend: {
 										display: false,
+										color: 'black',
 									},
 								},
 							}}
 							data={{
+								color: '#fff',
 								labels: Object.values(ESTADOS),
-								display: false,
 								datasets: [
 									{
 										data: estadoTorneosCalculo(data.torneosCreados),
 										backgroundColor: [
-											'rgba(255, 99, 132, 0.2)',
-											'rgba(255, 159, 64, 0.2)',
-											'rgba(255, 205, 86, 0.2)',
-											'rgba(75, 192, 192, 0.2)',
-											'rgba(54, 162, 235, 0.2)',
-											'rgba(153, 102, 255, 0.2)',
+											'rgba(255, 99, 132, 1)',
+											'rgba(255, 159, 64, 1)',
+											'rgba(255, 205, 86, 1)',
+											'rgba(75, 192, 192, 1)',
+											'rgba(54, 162, 235, 1)',
+											'rgba(153, 102, 255, 1)',
 										],
 										borderColor: [
 											'rgb(255, 99, 132)',
