@@ -70,7 +70,7 @@ const RestorePassword = () => {
 
 	return (
 		<Grid container sx={{ minHeight: '100vh' }}>
-			<Navbar></Navbar>
+			<Navbar isPublic={true}></Navbar>
 			<PublicForm>
 				{!isUpdatedPassword ? (
 					<Grid>

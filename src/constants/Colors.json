@@ -1,0 +1,10 @@
+{
+		"primary": {
+			"main": "#28527A",
+			"contrastText": "#F4D160"
+		},
+		"secondary": {
+			"main": "#F4D160",
+			"contrastText": "#28527A"
+		}
+}

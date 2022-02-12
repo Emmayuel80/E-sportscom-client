@@ -3,9 +3,10 @@ import React, { useContext } from 'react';
 import DashBoardJugadorContext from '../../context/DashboardJugadorContext';
 import PublicForm from '../PublicForm';
 import ResponseError from '../ResponseError';
+import DashboardBuscarTorneos from './DashboardBuscarTorneos';
 
 const EditProfile = () => {
-	const { user } = useContext(DashBoardJugadorContext);
+	const { user, setUser, changeComponent } = useContext(DashBoardJugadorContext);
 	const [values, setValues] = React.useState({
 		usuario: user.nombre,
 		nombreInvocador: user.nombre_invocador || '',
@@ -17,25 +18,30 @@ const EditProfile = () => {
 			return;
 		}
 
-		fetch(`${process.env.REACT_APP_API_URL}/register`, {
-			method: 'POST',
+		fetch(`${process.env.REACT_APP_API_URL}/editProfile`, {
+			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + user.token,
 			},
 			body: JSON.stringify({
-				email: values.email,
-				password: values.password1,
-				username: values.usuario,
-				type: values.tipo,
+				nombre: values.usuario,
+				nombre_invocador: values.nombreInvocador,
+
 			}),
 		})
 			.then((response) => response.json())
 			.then((response) => {
 				if (response.error) {
-					setResponseError(response.error);
+					setResponseError(response.message);
 				} else {
-					window.location.href = '/login';
+					localStorage.setItem('data', JSON.stringify({...response.data[0], token: user.token}));
+					setUser({...response.data[0], token: user.token});
+					changeComponent(<DashboardBuscarTorneos />);
 				}
+			})
+			.catch((error) => {
+				setResponseError(error);
 			});
 	};
 

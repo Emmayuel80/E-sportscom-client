@@ -92,7 +92,7 @@ const Register = () => {
 
 	return nextStep ? (
 		<Grid container sx={{ minHeight: '100vh' }}>
-			<Navbar />
+			<Navbar isPublic={true} />
 			<PublicForm>
 				<Grid item>
 					<Typography variant='h6'>

@@ -24,6 +24,7 @@ ChartJS.register(
 	Legend
 );
 
+// eslint-disable-next-line complexity
 const DashboardOrganizadorInicio = () => {
 	const [data, setData] = React.useState({});
 	const { user } = useContext(DashboardOrganizadorContext);
@@ -102,16 +103,16 @@ const DashboardOrganizadorInicio = () => {
 						<Grid xs={12} md={3} item>
 							<Typography variant='h5'>
 								Nombre:{' '}
-								{data.latestTorneoCreado
-									? data.latestTorneoCreado[0].nombre
+								{data?.latestTorneoCreado
+									? data.latestTorneoCreado[0]?.nombre
 									: '-'}
 							</Typography>
 						</Grid>
 						<Grid xs={12} md={3} item>
 							<Typography variant='h5'>
 								Juego:{' '}
-								{data.latestTorneoCreado
-									? JUEGOS[`${data.latestTorneoCreado[0].id_juego}`]
+								{data?.latestTorneoCreado
+									? JUEGOS[`${data.latestTorneoCreado[0]?.id_juego}`]
 									: '-'}
 							</Typography>
 						</Grid>
@@ -119,7 +120,7 @@ const DashboardOrganizadorInicio = () => {
 							<Typography variant='h5'>
 								Estado:{' '}
 								{data.latestTorneoCreado
-									? ESTADOS[`${data.latestTorneoCreado[0].id_estado}`]
+									? ESTADOS[`${data.latestTorneoCreado[0]?.id_estado}`]
 									: '-'}
 							</Typography>
 						</Grid>
@@ -127,7 +128,7 @@ const DashboardOrganizadorInicio = () => {
 							<Typography variant='h5'>
 								Código:{' '}
 								{data.latestTorneoCreado
-									? data.latestTorneoCreado[0].codigo_torneo
+									? data.latestTorneoCreado[0]?.codigo_torneo
 									: '-'}
 							</Typography>
 						</Grid>
@@ -148,7 +149,7 @@ const DashboardOrganizadorInicio = () => {
 							Actividad reciente
 						</Typography>
 					</Grid>
-					{data.latestActivity ? (
+					{data && data.latestActivity ? (
 						data.latestActivity.map((register, index) => {
 							return (
 								<Grid
