@@ -151,7 +151,8 @@ const DashboardOrganizador = (props) => {
 				component='main'
 				sx={{
 					flexGrow: 1,
-					p: 3,
+					p: 0,
+					m: 0,
 					width: { md: '100vw', lg: `calc(100% - ${240}px)` },
 				}}>
 				<Grid

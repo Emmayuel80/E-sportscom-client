@@ -8,6 +8,17 @@ const buttonStyles = {
 	width: '100%',
 };
 const Landing = () => {
+	React.useEffect(() => {
+		const sesion = JSON.parse(localStorage.getItem('data'));
+		if (sesion) {
+			if (sesion.tipo === 'jugador') {
+				window.location.href = '/dashboardJugador';
+			} else {
+				window.location.href = '/dashboardOrganizador';
+			}
+		}
+	}, []);
+
 	return (
 		<Grid
 			container

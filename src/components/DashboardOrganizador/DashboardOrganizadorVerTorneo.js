@@ -21,6 +21,7 @@ import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
 import AvatarImg from '../../pngegg.png';
 import MaterialIcon from 'material-icons-react';
+import expulsarJugador from '../../services/expulsarJugador';
 const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 	// Context
 	const { user } = React.useContext(DashboardOrganizadorContext);
@@ -28,6 +29,7 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 	const [values, setValues] = React.useState(null);
 	const [responseError, setResponseError] = React.useState(false);
 	const [ganador, setGanador] = React.useState(null);
+	const [disableAll, setDisableAll] = React.useState(false);
 	// Handlers
 	// UseEffect
 	React.useEffect(() => {
@@ -51,27 +53,28 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 	return !values ? (
 		<Grid item></Grid>
 	) : (
-		<Grid container justifyContent='center' direction='column'>
+		<Grid container justifyContent='center' direction='row'>
 			<Grid
 				sx={{ py: 5 }}
 				container
 				justifyContent='center'
-				direction='column'
+				direction='row'
 				item>
-				<Grid item>
+				<Grid item xs={12}>
 					<Typography variant='h2'>{values.torneo.nombre}</Typography>
 				</Grid>
-				<Grid sx={{ py: 2, px: 1, fontWeight: 'bold' }} item>
+				<Grid xs={12} sx={{ py: 2, px: 1, fontWeight: 'bold' }} item>
 					<Typography variant='h5'>{JUEGOS[values.torneo.id_juego]}</Typography>
 				</Grid>
 				<Grid
 					item
 					container
 					justifyContent={'start'}
+					xs={12}
 					direction='row'
 					sx={{
 						display: 'flex',
-						p: 1,
+						px: 0.3,
 						alignItems: 'center',
 						width: 'fit-content',
 						border: `1px solid ${COLORS.secondary.main}`,
@@ -79,13 +82,13 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 						bgcolor: COLORS.primary.main,
 						color: 'black',
 						'& svg': {
-							m: 1.5,
+							m: 0.5,
 						},
 						'& hr': {
 							mx: 0.5,
 						},
 					}}>
-					<Grid item sx={{ p: 0.5 }}>
+					<Grid item sx={{ px: 0.5 }}>
 						<Typography variant='span'>{values.torneo.description}</Typography>
 					</Grid>
 					<Divider
@@ -94,7 +97,7 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 						variant='middle'
 						flexItem
 					/>
-					<Grid item sx={{ p: 0.5 }}>
+					<Grid item sx={{ px: 0.5 }}>
 						<Typography variant='span'>
 							{' '}
 							Fecha inicio:{' '}
@@ -107,7 +110,7 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 						variant='middle'
 						flexItem
 					/>
-					<Grid item sx={{ p: 0.5 }}>
+					<Grid item sx={{ px: 0.5 }}>
 						<Typography variant='span'>
 							{' '}
 							Fecha fin registro:{' '}
@@ -117,19 +120,20 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 				</Grid>
 			</Grid>
 			{ganador && (
-				<Grid item container justifyContent='center' direction='column'>
+				<Grid item container justifyContent='center' direction='row'>
 					<Typography variant='h5'>Ganador: {ganador.nombre}</Typography>
 				</Grid>
 			)}
 			<Grid
-				sx={{ py: 5 }}
+				sx={{ width: '80vw' }}
+				xs={12}
 				item
 				container
 				justifyContent='center'
 				direction='column'>
 				<Typography variant='h4'>Participantes </Typography>
 				<TableContainer>
-					<Table sx={{ textAlign: 'end' }}>
+					<Table sx={{ overflowX: 'hidden' }}>
 						<TableHead>
 							<TableRow>
 								<TableCell></TableCell>
@@ -183,7 +187,19 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 										{values.torneo.id_estado === 0 && (
 											<TableCell sx={{ textAlign: 'center' }}>
 												<Tooltip title='Expulsar jugador'>
-													<IconButton>
+													<IconButton
+														disabled={disableAll}
+														onClick={(e) =>
+															expulsarJugador(
+																user.token,
+																element.id_usuario,
+																idTorneo,
+																setResponseError,
+																values,
+																setValues,
+																setDisableAll
+															)
+														}>
 														<MaterialIcon icon='person_off'></MaterialIcon>
 													</IconButton>
 												</Tooltip>
