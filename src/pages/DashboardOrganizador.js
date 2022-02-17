@@ -151,15 +151,20 @@ const DashboardOrganizador = (props) => {
 				component='main'
 				sx={{
 					flexGrow: 1,
-					p: 3,
+					p: 0,
+					m: 0,
 					width: { md: '100vw', lg: `calc(100% - ${240}px)` },
 				}}>
-				<Grid container sx={{ minHeight: '100vh' }}>
+				<Grid
+					container
+					direction='column'
+					justifyContent='center'
+					sx={{ minHeight: '100vh' }}>
 					<Grid item container justifyContent='center'>
 						<Grid
 							item
 							container
-							direction='column'
+							direction='row'
 							justifyContent='center'
 							xs={10}
 							sx={{ minHeight: '100vh', backgroundColor: '#28527A', py: 12 }}>

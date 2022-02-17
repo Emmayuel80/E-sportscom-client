@@ -33,7 +33,7 @@ const VerifyEmail = () => {
 
 	return (
 		<Grid>
-			<Navbar></Navbar>
+			<Navbar isPublic={true}></Navbar>
 			{!responseError ? (
 				<Grid container sx={{ minHeight: '100vh', textAlign: 'center' }}>
 					<PublicForm>

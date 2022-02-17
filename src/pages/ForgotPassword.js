@@ -54,7 +54,7 @@ const ForgotPassword = () => {
 	React.useEffect(() => {}, []);
 	return (
 		<Grid container sx={{ minHeight: '100vh' }}>
-			<Navbar></Navbar>
+			<Navbar isPublic={true}></Navbar>
 			<PublicForm pady={5}>
 				{!sentEmail ? (
 					<Grid>

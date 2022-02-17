@@ -17,7 +17,7 @@ import MaterialIcon from 'material-icons-react';
 import DashboardEditProfile from '../components/DashboardJugador/DashboardEditProfile';
 import Logout from '../services/logout';
 const DashboardJugador = () => {
-	const { Component, setUser, changeComponent } = useContext(
+	const { Component, user, setUser, changeComponent } = useContext(
 		DashBoardJugadorContext
 	);
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,7 +44,7 @@ const DashboardJugador = () => {
 					aria-controls={open ? 'account-menu' : undefined}
 					aria-haspopup='true'
 					aria-expanded={open ? 'true' : undefined}>
-					<Avatar src={AvatarImg} />
+					<Avatar src={user.image ? user.image : AvatarImg} />
 				</IconButton>
 			</Navbar>
 			<Grid container>
@@ -84,7 +84,7 @@ const DashboardJugador = () => {
 					transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 					anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
 					<MenuItem>
-						<Avatar /> Profile
+					<Avatar src={user.image ? user.image : AvatarImg} /> {user.nombre_invocador}
 					</MenuItem>
 					<Divider />
 					<MenuItem onClick={(e) => changeComponent(<DashboardEditProfile />)}>
