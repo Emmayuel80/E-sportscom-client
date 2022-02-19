@@ -17,7 +17,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import JUEGOS from '../../constants/Juegos.json';
 import ResponseError from '../ResponseError';
-import crearTorneo from '../../services/crearTorneo';
+import crearTorneo from '../../services/organizador/crearTorneo';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
 const DashboardOrganizadorCrearTorneo = () => {
 	// checar que id juego coincida con los equipos

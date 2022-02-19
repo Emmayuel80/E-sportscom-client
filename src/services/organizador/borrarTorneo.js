@@ -1,4 +1,4 @@
-import DashboardOrganizadorMisTorneos from '../components/DashboardOrganizador/DashboardOrganizadorMisTorneos';
+import DashboardOrganizadorMisTorneos from '../../components/DashboardOrganizador/DashboardOrganizadorMisTorneos';
 import React from 'react';
 
 export default function (token, idTorneo, setResponseError, changeComponent) {

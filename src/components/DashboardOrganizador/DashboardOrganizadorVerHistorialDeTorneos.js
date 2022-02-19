@@ -3,25 +3,38 @@ import { Grid, Pagination, Typography, Skeleton } from '@mui/material';
 // import CustomCard from '../CustomCard';
 import CardElement from '../CardElement';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
-import getTorneos from '../../services/getTorneos';
+import getTorneos from '../../services/organizador/getTorneos';
 // import PublicForm from '../PublicForm';
 const cantidad = 6;
 // let torneoSize = 0;
 const DashboardOrganizadorVerHistorialDeTorneos = () => {
 	const { user } = useContext(DashboardOrganizadorContext);
-	const [torneos, setTorneos] = React.useState([]);
+	const [torneos, setTorneos] = React.useState({});
+	const [paginationCount, setPaginationCount] = React.useState(0);
+
+	const getPaginationCalc = () => {
+		const n = parseInt(torneos.total) / cantidad;
+		setPaginationCount(n % 1 === 0 ? n : parseInt(n + 1));
+	};
 
 	const handlePaginationChange = (event, index) => {
-		getTorneos(index, cantidad, user, setTorneos);
+		getTorneos(index, cantidad, user, setTorneos, torneos);
 	};
 
 	React.useEffect(() => {
 		// tournaments/:inicio/:cantidad
 		if (user.token) {
-			getTorneos(0, cantidad, user, setTorneos);
+			getTorneos(0, cantidad, user, setTorneos, torneos);
 			// torneoSize = Math.round(torneos.length / cantidad) + 1;
 		}
 	}, []);
+
+	React.useEffect(() => {
+		if (torneos.total) {
+			getPaginationCalc();
+		}
+	}, [torneos]);
+
 	console.log(Math.round(torneos.total / cantidad) + 1);
 
 	return (
@@ -75,7 +88,7 @@ const DashboardOrganizadorVerHistorialDeTorneos = () => {
 						<Pagination
 							onChange={handlePaginationChange}
 							size='small'
-							count={Math.round(parseInt(torneos.total) / cantidad) + 1}
+							count={paginationCount}
 							color='secondary'
 						/>
 					)}

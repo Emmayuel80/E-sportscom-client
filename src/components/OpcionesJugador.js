@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Toolbar, Divider } from '@mui/material';
 import DashBoardJugadorContext from '../context/DashboardJugadorContext';
 import DashboardBuscarTorneos from './DashboardJugador/DashboardBuscarTorneos';
 import DashboardMisEquipos from './DashboardJugador/DashboardMisEquipos';
-
 const buttonExtraStyles = {
 	fontSize: 20,
 };
@@ -16,6 +15,8 @@ const OpcionesJugador = () => {
 			alignItems='strech'
 			justifyContent='space-around'
 			direction='column'>
+			<Toolbar />
+			<Divider />
 			<Button
 				sx={buttonExtraStyles}
 				onClick={(e) => changeComponent(<DashboardBuscarTorneos />)}

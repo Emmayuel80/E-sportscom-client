@@ -14,14 +14,14 @@ import {
 } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
-import getDataTorneo from '../../services/getDataTorneo';
+import getDataTorneo from '../../services/organizador/getDataTorneo';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
 import ResponseError from '../ResponseError';
 import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
 import AvatarImg from '../../pngegg.png';
 import MaterialIcon from 'material-icons-react';
-import expulsarJugador from '../../services/expulsarJugador';
+import expulsarJugador from '../../services/organizador/expulsarJugador';
 const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 	// Context
 	const { user } = React.useContext(DashboardOrganizadorContext);

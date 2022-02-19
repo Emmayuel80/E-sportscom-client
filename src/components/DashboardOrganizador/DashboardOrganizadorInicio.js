@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import JUEGOS from '../../constants/Juegos.json';
 import ESTADOS from '../../constants/Estados.json';
-import estadoTorneosCalculo from '../../services/estadoTorneosCalculo';
+import estadoTorneosCalculo from '../../services/organizador/estadoTorneosCalculo';
 ChartJS.register(
 	CategoryScale,
 	LinearScale,

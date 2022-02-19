@@ -1,5 +1,5 @@
 import React from 'react';
-import DashboardOrganizadorInicio from '../components/DashboardOrganizador/DashboardOrganizadorInicio';
+import DashboardOrganizadorInicio from '../../components/DashboardOrganizador/DashboardOrganizadorInicio';
 export default function crearTorneo(
 	datos,
 	token,
@@ -29,7 +29,7 @@ export default function crearTorneo(
 		.then((response) => response.json())
 		.then((response) => {
 			if (response.err) {
-				setResponseError(response.msg);
+				setResponseError(response.err);
 			} else {
 				changeComponent(<DashboardOrganizadorInicio />);
 			}

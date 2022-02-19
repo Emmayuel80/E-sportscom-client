@@ -21,10 +21,10 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import ResponseError from '../ResponseError';
-import actualizarTorneo from '../../services/actualizarTorneo';
+import actualizarTorneo from '../../services/organizador/actualizarTorneo';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
 import PropTypes from 'prop-types';
-import borrarTorneo from '../../services/borrarTorneo';
+import borrarTorneo from '../../services/organizador/borrarTorneo';
 const DashboardOrganizadorEditarTorneo = ({ torneoData }) => {
 	// Context
 	const { user, changeComponent } = useContext(DashboardOrganizadorContext);
