@@ -1,16 +1,19 @@
-export default function (index, cantidad, user, setTorneos, torneos) {
+export default function (index, cantidad, user, setTorneos, search = null) {
 	const startIndex = (index > 0 ? index - 1 : index) * cantidad;
-	console.log('Fecth');
-	fetch(
-		`${process.env.REACT_APP_API_URL}/jugador/getTorneosActivos/${startIndex}/${cantidad}`,
-		{
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + user.token,
-			},
-		}
-	)
+	let endpoint = '';
+	if (search === null) {
+		endpoint = `getTorneosActivos/${startIndex}/${cantidad}`;
+	} else {
+		endpoint = `getTorneoByName/${startIndex}/${cantidad}/${search}`;
+	}
+
+	fetch(`${process.env.REACT_APP_API_URL}/jugador/${endpoint}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + user.token,
+		},
+	})
 		.then((response) => response.json())
 		.then((data) => {
 			if (data) {
