@@ -27,7 +27,7 @@ const CircularDisplay = ({ data }) => {
 						justifyContent: 'center',
 					}}>
 					<Typography
-						sx={{ fontSize: 100, color: 'black' }}
+						sx={{ fontSize: 100, color: 'white' }}
 						variant='caption'
 						component='div'
 						color='text.secondary'>
@@ -36,7 +36,12 @@ const CircularDisplay = ({ data }) => {
 				</Box>
 			</Box>
 			<Typography
-				sx={{ textAlign: 'center', fontSize: 30, fontWeight: 'bold' }}>
+				sx={{
+					textAlign: 'center',
+					fontSize: 30,
+					fontWeight: 'bold',
+					color: 'white',
+				}}>
 				{data.description ? data.description : '-'}
 			</Typography>
 		</Grid>

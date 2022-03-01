@@ -1,8 +1,8 @@
 export default function (index, cantidad, user, setTorneos, torneos) {
-	const startIndex = (index > 0 ? index - 1 : index) * cantidad;
+	const  startIndex = (index > 0 ? index - 1 : index) * cantidad;
 
 	fetch(
-		`${process.env.REACT_APP_API_URL}/organizador/tournaments/${startIndex}/${cantidad}`,
+		`${process.env.REACT_APP_API_URL}/jugador/getTorneosJugador/${startIndex}/${cantidad}`,
 		{
 			method: 'GET',
 			headers: {

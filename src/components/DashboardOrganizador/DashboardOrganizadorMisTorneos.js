@@ -17,7 +17,9 @@ const DashboardOrganizadorMisTorneos = () => {
 	return (
 		<Grid container justifyContent='center'>
 			<Grid item xs={12}>
-				<Typography variant='h3'>Mis torneos activos</Typography>
+				<Typography sx={{ color: 'white' }} variant='h3'>
+					Mis torneos activos
+				</Typography>
 			</Grid>
 			<Grid
 				container

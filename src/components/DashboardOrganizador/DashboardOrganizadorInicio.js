@@ -24,6 +24,10 @@ ChartJS.register(
 	Legend
 );
 
+const textStyle = {
+	color: 'white',
+};
+
 // eslint-disable-next-line complexity
 const DashboardOrganizadorInicio = () => {
 	const [data, setData] = React.useState({});
@@ -59,7 +63,7 @@ const DashboardOrganizadorInicio = () => {
 					<Typography
 						variant='h4'
 						align='center'
-						sx={{ textAlign: 'left', px: 4, fontWeight: 'bold' }}>
+						sx={{ textAlign: 'left', px: 4, fontWeight: 'bold', ...textStyle }}>
 						Bienvenido, {user.nombre}
 					</Typography>
 				</Grid>
@@ -90,7 +94,7 @@ const DashboardOrganizadorInicio = () => {
 						<Typography
 							variant='h4'
 							align='center'
-							sx={{ textAlign: 'left', px: 4 }}>
+							sx={{ textAlign: 'left', px: 4, ...textStyle }}>
 							Torneo reciente
 						</Typography>
 					</Grid>
@@ -101,7 +105,7 @@ const DashboardOrganizadorInicio = () => {
 						direction='row'
 						justifyContent='space-around'>
 						<Grid xs={12} md={3} item>
-							<Typography variant='h5'>
+							<Typography sx={textStyle} variant='h5'>
 								Nombre:{' '}
 								{data?.latestTorneoCreado
 									? data.latestTorneoCreado[0]?.nombre
@@ -109,7 +113,7 @@ const DashboardOrganizadorInicio = () => {
 							</Typography>
 						</Grid>
 						<Grid xs={12} md={3} item>
-							<Typography variant='h5'>
+							<Typography sx={textStyle} variant='h5'>
 								Juego:{' '}
 								{data?.latestTorneoCreado
 									? JUEGOS[`${data.latestTorneoCreado[0]?.id_juego}`]
@@ -117,7 +121,7 @@ const DashboardOrganizadorInicio = () => {
 							</Typography>
 						</Grid>
 						<Grid xs={12} md={3} item>
-							<Typography variant='h5'>
+							<Typography sx={textStyle} variant='h5'>
 								Estado:{' '}
 								{data.latestTorneoCreado
 									? ESTADOS[`${data.latestTorneoCreado[0]?.id_estado}`]
@@ -125,7 +129,7 @@ const DashboardOrganizadorInicio = () => {
 							</Typography>
 						</Grid>
 						<Grid xs={12} md={3} item>
-							<Typography variant='h5'>
+							<Typography sx={textStyle} variant='h5'>
 								Código:{' '}
 								{data.latestTorneoCreado
 									? data.latestTorneoCreado[0]?.codigo_torneo
@@ -145,7 +149,7 @@ const DashboardOrganizadorInicio = () => {
 						<Typography
 							variant='h4'
 							align='center'
-							sx={{ textAlign: 'left', px: 4 }}>
+							sx={{ textAlign: 'left', px: 4, ...textStyle }}>
 							Actividad reciente
 						</Typography>
 					</Grid>
@@ -156,14 +160,19 @@ const DashboardOrganizadorInicio = () => {
 									item
 									xs={12}
 									key={JSON.stringify(data.latestActivity) + index}>
-									<Typography variant='h6' sx={{ textAlign: 'left', px: 6 }}>
+									<Typography
+										variant='h6'
+										sx={{ textAlign: 'left', px: 6, ...textStyle }}>
 										{new Date(register.fecha_modificacion).toLocaleString()} |{' '}
 										{register.desc_modificacion
 											.split('\n')
 											.map((item, index) => {
 												return (
 													<Grid key={index}>
-														<Typography variant='span'> {item} </Typography>
+														<Typography sx={textStyle} variant='span'>
+															{' '}
+															{item}{' '}
+														</Typography>
 														<br />
 													</Grid>
 												);
@@ -174,7 +183,9 @@ const DashboardOrganizadorInicio = () => {
 							);
 						})
 					) : (
-						<Typography variant='h6' sx={{ textAlign: 'left', px: 6, py: 1 }}>
+						<Typography
+							variant='h6'
+							sx={{ textAlign: 'left', px: 6, py: 1, ...textStyle }}>
 							{' '}
 							No hay actividad reciente
 						</Typography>

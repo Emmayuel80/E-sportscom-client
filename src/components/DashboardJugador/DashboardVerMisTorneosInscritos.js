@@ -1,19 +1,17 @@
 import React, { useContext } from 'react';
 import { Grid, Pagination, Typography, Skeleton } from '@mui/material';
-// import CustomCard from '../CustomCard';
-import CardElement from '../CardElement';
-import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
-import getTorneos from '../../services/organizador/getTorneos';
-// import PublicForm from '../PublicForm';
+import CardElementJugador from '../CardElementJugador';
+import DashboardJugadorContext from '../../context/DashboardJugadorContext';
+import getTorneos from '../../services/jugador/getTorneosInscritos';
 const cantidad = 6;
 // let torneoSize = 0;
-const DashboardOrganizadorVerHistorialDeTorneos = () => {
-	const { user } = useContext(DashboardOrganizadorContext);
+const DashboardVerTorneosInscritos = () => {
+	const { user } = useContext(DashboardJugadorContext);
 	const [torneos, setTorneos] = React.useState({});
 	const [paginationCount, setPaginationCount] = React.useState(0);
 
 	const getPaginationCalc = () => {
-		const n = parseInt(torneos.total.numero) / cantidad;
+		const n = parseInt(torneos.total) / cantidad;
 		setPaginationCount(n % 1 === 0 ? n : parseInt(n + 1));
 	};
 
@@ -31,12 +29,11 @@ const DashboardOrganizadorVerHistorialDeTorneos = () => {
 
 	React.useEffect(() => {
 		if (torneos.total) {
-			console.log(torneos);
 			getPaginationCalc();
 		}
 	}, [torneos]);
 
-	// console.log(Math.round(torneos.total.numero / cantidad) + 1);
+	console.log(Math.round(torneos.total / cantidad) + 1);
 
 	return (
 		<Grid item xs={12} container justifyContent='center' direction='row'>
@@ -68,9 +65,7 @@ const DashboardOrganizadorVerHistorialDeTorneos = () => {
 									sm={6}
 									md={4}
 									lg={3}>
-									<CardElement
-										data={element}
-										edicionHabilitada={false}></CardElement>
+									<CardElementJugador data={element}></CardElementJugador>
 								</Grid>
 							);
 						})
@@ -101,4 +96,4 @@ const DashboardOrganizadorVerHistorialDeTorneos = () => {
 	);
 };
 
-export default DashboardOrganizadorVerHistorialDeTorneos;
+export default DashboardVerTorneosInscritos;

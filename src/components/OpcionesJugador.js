@@ -3,6 +3,7 @@ import { Grid, Button, Toolbar, Divider } from '@mui/material';
 import DashBoardJugadorContext from '../context/DashboardJugadorContext';
 import DashboardBuscarTorneos from './DashboardJugador/DashboardBuscarTorneos';
 import DashboardMisEquipos from './DashboardJugador/DashboardMisEquipos';
+import DashboardVerMisTorneosInscritos from './DashboardJugador/DashboardVerMisTorneosInscritos';
 const buttonExtraStyles = {
 	fontSize: 20,
 };
@@ -24,8 +25,12 @@ const OpcionesJugador = () => {
 				color='secondary'>
 				Buscar Torneos
 			</Button>
-			<Button sx={buttonExtraStyles} variant='text' color='secondary'>
-				Ver torneos activos
+			<Button
+				onClick={(e) => changeComponent(<DashboardVerMisTorneosInscritos />)}
+				sx={buttonExtraStyles}
+				variant='text'
+				color='secondary'>
+				Ver torneos inscritos
 			</Button>
 			<Button sx={buttonExtraStyles} variant='text' color='secondary'>
 				Historial de torneos

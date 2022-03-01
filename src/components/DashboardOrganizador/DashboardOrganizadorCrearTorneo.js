@@ -91,6 +91,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 							</Select>
 						</FormControl>
 					</Grid>
+
 					{values.idJuego === '1' && (
 						<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
 							<FormControl fullWidth>
@@ -109,21 +110,37 @@ const DashboardOrganizadorCrearTorneo = () => {
 						</Grid>
 					)}
 					{values.idJuego === '2' && (
-						<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
-							<FormControl fullWidth>
-								<InputLabel id='rondas-select'>Rondas</InputLabel>
-								<Select
-									required
-									labelId='rondas-select'
-									value={values.noEnfrentamientos}
-									label='No. Rondas'
-									onChange={handleChange('noEnfrentamientos')}>
-									<MenuItem value={2}>2 Rondas</MenuItem>
-									<MenuItem value={4}>4 Rondas</MenuItem>
-									<MenuItem value={8}>8 Rondas</MenuItem>
-								</Select>
-							</FormControl>
-						</Grid>
+						<>
+							<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
+								<FormControl fullWidth>
+									<InputLabel id='equipos-select'>No. Participantes</InputLabel>
+									<Select
+										required
+										labelId='equipos-select'
+										value={values.noEquipos < 8 ? 8 : values.noEquipos}
+										label='No. Participantes'
+										onChange={handleChange('noEquipos')}>
+										<MenuItem value={8}>8 Jugadores</MenuItem>
+										<MenuItem value={16}>16 Jugadores</MenuItem>
+									</Select>
+								</FormControl>
+							</Grid>
+							<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
+								<FormControl fullWidth>
+									<InputLabel id='rondas-select'>Rondas</InputLabel>
+									<Select
+										required
+										labelId='rondas-select'
+										value={values.noEnfrentamientos}
+										label='No. Rondas'
+										onChange={handleChange('noEnfrentamientos')}>
+										<MenuItem value={2}>2 Rondas</MenuItem>
+										<MenuItem value={4}>4 Rondas</MenuItem>
+										<MenuItem value={8}>8 Rondas</MenuItem>
+									</Select>
+								</FormControl>
+							</Grid>
+						</>
 					)}
 				</Grid>
 				<Grid container item>

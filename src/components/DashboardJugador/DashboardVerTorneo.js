@@ -1,35 +1,30 @@
 import {
-	Avatar,
 	Divider,
 	Grid,
-	IconButton,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-	Tooltip,
 	Typography,
+	// Avatar,
+	// Table,
+	// TableBody,
+	// TableCell,
+	// TableContainer,
+	// TableHead,
+	// TableRow,
 } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
-import getDataTorneo from '../../services/organizador/getDataTorneo';
-import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
+import getDataTorneo from '../../services/jugador/getDataTorneo.js';
+import DashboardJugadorContext from '../../context/DashboardJugadorContext';
 import ResponseError from '../ResponseError';
 import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
-import AvatarImg from '../../pngegg.png';
-import MaterialIcon from 'material-icons-react';
-import expulsarJugador from '../../services/organizador/expulsarJugador';
-const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
+// import AvatarImg from '../../pngegg.png';
+const DashboardVerTorneo = ({ idTorneo }) => {
 	// Context
-	const { user } = React.useContext(DashboardOrganizadorContext);
+	const { user } = React.useContext(DashboardJugadorContext);
 	// States
 	const [values, setValues] = React.useState(null);
 	const [responseError, setResponseError] = React.useState(false);
 	const [ganador, setGanador] = React.useState(null);
-	const [disableAll, setDisableAll] = React.useState(false);
 	// Handlers
 	// UseEffect
 	React.useEffect(() => {
@@ -142,28 +137,20 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 				<Typography sx={{ color: 'white' }} variant='h4'>
 					Participantes{' '}
 				</Typography>
-				<TableContainer>
+				{/* <TableContainer>
 					<Table sx={{ overflowX: 'hidden' }}>
 						<TableHead>
 							<TableRow>
 								<TableCell></TableCell>
 								<TableCell sx={{ color: 'white' }}>Nombre</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									Posicion
-								</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									Puntaje
-								</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+								<TableCell sx={{ textAlign: 'end' }}>Posicion</TableCell>
+								<TableCell sx={{ textAlign: 'end' }}>Puntaje</TableCell>
+								<TableCell sx={{ textAlign: 'end' }}>
 									# Enfrentamientos
 								</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									Daño Total
-								</TableCell>
+								<TableCell sx={{ textAlign: 'end' }}>Daño Total</TableCell>
 								{values.torneo.id_estado === 0 && (
-									<TableCell sx={{ textAlign: 'center', color: 'white' }}>
-										Acciones
-									</TableCell>
+									<TableCell sx={{ textAlign: 'center' }}>Acciones</TableCell>
 								)}
 							</TableRow>
 						</TableHead>
@@ -171,79 +158,43 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 							{values.participantes.map((element, index) => {
 								return (
 									<TableRow key={index}>
-										{/* TFT */}
+										
 										<TableCell>
 											<Avatar src={user.image ? user.image : AvatarImg} />
 										</TableCell>
 										<TableCell>
-											<Typography
-												sx={{ color: 'white' }}
-												variant='body2'
-												component='span'>
+											<Typography variant='body2' component='span'>
 												{element.nombre}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography
-												sx={{ color: 'white' }}
-												variant='body2'
-												component='span'>
+											<Typography variant='body2' component='span'>
 												{element.posicion === -1
 													? 'Sin posicion'
 													: element.posicion}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography
-												sx={{ color: 'white' }}
-												variant='body2'
-												component='span'>
+											<Typography variant='body2' component='span'>
 												{element.puntaje_jugador}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography
-												sx={{ color: 'white' }}
-												variant='body2'
-												component='span'>
+											<Typography variant='body2' component='span'>
 												{element.no_enfrentamientos_jugados}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography
-												sx={{ color: 'white' }}
-												variant='body2'
-												component='span'>
+											<Typography variant='body2' component='span'>
 												{element.total_damage}
 											</Typography>
 										</TableCell>
-										{values.torneo.id_estado === 0 && (
-											<TableCell sx={{ textAlign: 'center' }}>
-												<Tooltip title='Expulsar jugador'>
-													<IconButton
-														disabled={disableAll}
-														onClick={(e) =>
-															expulsarJugador(
-																user.token,
-																element.id_usuario,
-																idTorneo,
-																setResponseError,
-																values,
-																setValues,
-																setDisableAll
-															)
-														}>
-														<MaterialIcon icon='person_off'></MaterialIcon>
-													</IconButton>
-												</Tooltip>
-											</TableCell>
-										)}
 									</TableRow>
 								);
 							})}
 						</TableBody>
 					</Table>
-				</TableContainer>
+				</TableContainer> */}
 			</Grid>
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
@@ -251,8 +202,8 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 		</Grid>
 	);
 };
-DashboardOrganizadorVerTorneo.propTypes = {
+DashboardVerTorneo.propTypes = {
 	idTorneo: PropTypes.any,
 };
 
-export default DashboardOrganizadorVerTorneo;
+export default DashboardVerTorneo;

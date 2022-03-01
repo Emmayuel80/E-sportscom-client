@@ -9,11 +9,13 @@ import COLORS from '../constants/Colors.json';
 import JUEGOS from '../constants/Juegos.json';
 import PropTypes from 'prop-types';
 import DashboardJugadordorContext from '../context/DashboardJugadorContext';
+import DashboardVerTorneo from './DashboardJugador/DashboardVerTorneo';
 // import DashboardOrganizadorVerTorneo from './DashboardOrganizador/DashboardOrganizadorVerTorneo';
 // import MaterialIcon from 'material-icons-react';
 // import DashboardOrganizadorEditarTorneo from './DashboardOrganizador/DashboardOrganizadorEditarTorneo';
 
 const CardElement = ({ data }) => {
+	// console.log(data);
 	const { changeComponent } = React.useContext(DashboardJugadordorContext);
 	return (
 		<Card
@@ -22,7 +24,13 @@ const CardElement = ({ data }) => {
 				minWidth: 310,
 				borderRadius: '1rem',
 			}}>
-			<CardActionArea onClick={(e) => changeComponent(<></>)} sx={{ p: 2 }}>
+			<CardActionArea
+				onClick={(e) =>
+					changeComponent(
+						<DashboardVerTorneo idTorneo={data.id_torneo}></DashboardVerTorneo>
+					)
+				}
+				sx={{ p: 2 }}>
 				<Grid
 					sx={{ py: 1.5, px: 1.5 }}
 					justifyContent='space-between'
@@ -30,7 +38,7 @@ const CardElement = ({ data }) => {
 					item
 					container
 					direction='row'>
-					<Grid item xs={6}>
+					<Grid item xs={6} sx={{ height: '70px' }}>
 						<Typography
 							sx={{ overflowWrap: 'break-word', inlineSize: '200px' }}
 							variant='h5'>
