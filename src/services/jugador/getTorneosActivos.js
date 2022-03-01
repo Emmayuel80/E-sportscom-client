@@ -4,9 +4,9 @@ export default function (index, cantidad, user, setTorneos, search = null) {
 	if (search === null) {
 		endpoint = `getTorneosActivos/${startIndex}/${cantidad}`;
 	} else {
-		endpoint = `getTorneoByName/${startIndex}/${cantidad}/${search}`;
+		endpoint = `getTorneoByName/${startIndex}/${cantidad}?name=${search}`;
 	}
-
+	setTorneos({});
 	fetch(`${process.env.REACT_APP_API_URL}/jugador/${endpoint}`, {
 		method: 'GET',
 		headers: {

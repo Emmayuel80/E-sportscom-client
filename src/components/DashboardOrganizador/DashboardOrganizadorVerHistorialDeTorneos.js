@@ -13,7 +13,7 @@ const DashboardOrganizadorVerHistorialDeTorneos = () => {
 	const [paginationCount, setPaginationCount] = React.useState(0);
 
 	const getPaginationCalc = () => {
-		const n = parseInt(torneos.total) / cantidad;
+		const n = parseInt(torneos.total.numero) / cantidad;
 		setPaginationCount(n % 1 === 0 ? n : parseInt(n + 1));
 	};
 

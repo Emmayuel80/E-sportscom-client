@@ -1,5 +1,12 @@
 import React from 'react';
-import { Grid, TextField, Button, Pagination, Skeleton } from '@mui/material';
+import {
+	Grid,
+	TextField,
+	Button,
+	Pagination,
+	Skeleton,
+	Typography,
+} from '@mui/material';
 import CardElementJugador from '../CardElementJugador';
 import getTorneosActivos from '../../services/jugador/getTorneosActivos';
 import DashBoardJugadorContext from '../../context/DashboardJugadorContext';
@@ -60,7 +67,8 @@ const DashboardVerJugador = () => {
 				sx={{ pt: 4 }}>
 				<Grid
 					item
-					xs={10}
+					xs={8}
+					lg={10}
 					sx={{
 						borderTopLeftRadius: 5,
 						borderBottomLeftRadius: 5,
@@ -124,6 +132,16 @@ const DashboardVerJugador = () => {
 								</Grid>
 							);
 						})
+					) : torneos.err ? (
+						<Grid
+							item
+							container
+							justifyContent='space-around'
+							direction='column'>
+							<Typography variant='h4'>
+								No existen torneos con ese nombre
+							</Typography>
+						</Grid>
 					) : (
 						<Grid
 							item
