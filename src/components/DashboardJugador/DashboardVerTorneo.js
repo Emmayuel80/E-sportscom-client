@@ -2,13 +2,19 @@ import {
 	Divider,
 	Grid,
 	Typography,
-	// Avatar,
-	// Table,
-	// TableBody,
-	// TableCell,
-	// TableContainer,
-	// TableHead,
-	// TableRow,
+	Avatar,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Button,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
 } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -17,15 +23,28 @@ import DashboardJugadorContext from '../../context/DashboardJugadorContext';
 import ResponseError from '../ResponseError';
 import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
-// import AvatarImg from '../../pngegg.png';
+import AvatarImg from '../../pngegg.png';
+import unirseTorneoTFT from '../../services/jugador/unirseTorneoTFT.js';
+import DashboardBuscarTorneos from './DashboardBuscarTorneos';
+import DashboardVerMisTorneosInscritos from './DashboardVerMisTorneosInscritos';
 const DashboardVerTorneo = ({ idTorneo }) => {
 	// Context
-	const { user } = React.useContext(DashboardJugadorContext);
+	const { user, changeComponent } = React.useContext(DashboardJugadorContext);
 	// States
 	const [values, setValues] = React.useState(null);
 	const [responseError, setResponseError] = React.useState(false);
 	const [ganador, setGanador] = React.useState(null);
+
+	const [open, setOpen] = React.useState(false);
+
 	// Handlers
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 	// UseEffect
 	React.useEffect(() => {
 		getDataTorneo(user.token, idTorneo, setResponseError, setValues);
@@ -134,71 +153,170 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 				container
 				justifyContent='center'
 				direction='column'>
+				<Grid
+					item
+					xs={4}
+					container
+					direction='row'
+					justifyContent='start'
+					alignItems='center'>
+					{!values.torneo.participantes.some(
+						(value) => value.id_usuario === user.id_usuario
+					) && (
+						<Button
+							onClick={(e) =>
+								unirseTorneoTFT(
+									user,
+									values.torneo.id_torneo,
+									setResponseError,
+									handleClickOpen
+								)
+							}
+							variant='contained'
+							color='secondary'>
+							UNIRSE AL TORNEO
+						</Button>
+					)}
+				</Grid>
+
 				<Typography sx={{ color: 'white' }} variant='h4'>
 					Participantes{' '}
 				</Typography>
-				{/* <TableContainer>
+				<TableContainer>
 					<Table sx={{ overflowX: 'hidden' }}>
 						<TableHead>
 							<TableRow>
 								<TableCell></TableCell>
 								<TableCell sx={{ color: 'white' }}>Nombre</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>Posicion</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>Puntaje</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+									Posicion
+								</TableCell>
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+									Puntaje
+								</TableCell>
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
 									# Enfrentamientos
 								</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>Daño Total</TableCell>
-								{values.torneo.id_estado === 0 && (
-									<TableCell sx={{ textAlign: 'center' }}>Acciones</TableCell>
-								)}
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+									Daño Total
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{values.participantes.map((element, index) => {
-								return (
-									<TableRow key={index}>
-										
-										<TableCell>
-											<Avatar src={user.image ? user.image : AvatarImg} />
-										</TableCell>
-										<TableCell>
-											<Typography variant='body2' component='span'>
-												{element.nombre}
-											</Typography>
-										</TableCell>
-										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
-												{element.posicion === -1
-													? 'Sin posicion'
-													: element.posicion}
-											</Typography>
-										</TableCell>
-										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
-												{element.puntaje_jugador}
-											</Typography>
-										</TableCell>
-										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
-												{element.no_enfrentamientos_jugados}
-											</Typography>
-										</TableCell>
-										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
-												{element.total_damage}
-											</Typography>
-										</TableCell>
-									</TableRow>
-								);
-							})}
+							{values?.torneo?.participantes &&
+								values.torneo.participantes.map((element, index) => {
+									return (
+										<TableRow key={index}>
+											<TableCell sx={{ color: 'white' }}>
+												<Avatar
+													src={element.image ? element.image : AvatarImg}
+												/>
+											</TableCell>
+											<TableCell>
+												<Typography
+													sx={{ color: 'white' }}
+													variant='body2'
+													component='span'>
+													{element.nombre}
+												</Typography>
+											</TableCell>
+											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+												<Typography variant='body2' component='span'>
+													{element.posicion === -1
+														? 'Sin posicion'
+														: element.posicion}
+												</Typography>
+											</TableCell>
+											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+												<Typography variant='body2' component='span'>
+													{element.puntaje_jugador}
+												</Typography>
+											</TableCell>
+											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+												<Typography variant='body2' component='span'>
+													{element.no_enfrentamientos_jugados}
+												</Typography>
+											</TableCell>
+											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+												<Typography variant='body2' component='span'>
+													{element.total_damage}
+												</Typography>
+											</TableCell>
+										</TableRow>
+									);
+								})}
 						</TableBody>
 					</Table>
-				</TableContainer> */}
+				</TableContainer>
 			</Grid>
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
 			</Grid>
+			{responseError ? (
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby='alert-dialog-title'
+					aria-describedby='alert-dialog-description'>
+					<DialogTitle
+						sx={{ color: 'white', fontWeight: 'bold' }}
+						id='alert-dialog-title'>
+						{'Error'}
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText
+							sx={{ color: 'white' }}
+							id='alert-dialog-description'>
+							No fue posible unirte al torneo: {responseError}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							variant='contained'
+							color='secondary'
+							onClick={(e) =>
+								changeComponent(
+									<DashboardBuscarTorneos></DashboardBuscarTorneos>
+								)
+							}
+							autoFocus>
+							Aceptar
+						</Button>
+					</DialogActions>
+				</Dialog>
+			) : (
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby='alert-dialog-title'
+					aria-describedby='alert-dialog-description'>
+					<DialogTitle
+						sx={{ color: 'white', fontWeight: 'bold' }}
+						id='alert-dialog-title'>
+						{'Unirse a torneo'}
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText
+							sx={{ color: 'white' }}
+							id='alert-dialog-description'>
+							Te has unido a un torneo
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							variant='contained'
+							color='secondary'
+							onClick={(e) =>
+								changeComponent(
+									<DashboardVerMisTorneosInscritos></DashboardVerMisTorneosInscritos>
+								)
+							}
+							autoFocus>
+							Aceptar
+						</Button>
+					</DialogActions>
+				</Dialog>
+			)}
 		</Grid>
 	);
 };

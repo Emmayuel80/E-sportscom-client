@@ -173,7 +173,7 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 									<TableRow key={index}>
 										{/* TFT */}
 										<TableCell>
-											<Avatar src={user.image ? user.image : AvatarImg} />
+											<Avatar src={element.image ? element.image : AvatarImg} />
 										</TableCell>
 										<TableCell>
 											<Typography
