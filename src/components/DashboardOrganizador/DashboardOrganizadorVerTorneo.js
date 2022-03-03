@@ -14,14 +14,14 @@ import {
 } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
-import getDataTorneo from '../../services/getDataTorneo';
+import getDataTorneo from '../../services/organizador/getDataTorneo';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
 import ResponseError from '../ResponseError';
 import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
 import AvatarImg from '../../pngegg.png';
 import MaterialIcon from 'material-icons-react';
-import expulsarJugador from '../../services/expulsarJugador';
+import expulsarJugador from '../../services/organizador/expulsarJugador';
 const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 	// Context
 	const { user } = React.useContext(DashboardOrganizadorContext);
@@ -61,10 +61,14 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 				direction='row'
 				item>
 				<Grid item xs={12}>
-					<Typography variant='h2'>{values.torneo.nombre}</Typography>
+					<Typography sx={{ color: 'white' }} variant='h2'>
+						{values.torneo.nombre}
+					</Typography>
 				</Grid>
 				<Grid xs={12} sx={{ py: 2, px: 1, fontWeight: 'bold' }} item>
-					<Typography variant='h5'>{JUEGOS[values.torneo.id_juego]}</Typography>
+					<Typography sx={{ color: 'white' }} variant='h5'>
+						{JUEGOS[values.torneo.id_juego]}
+					</Typography>
 				</Grid>
 				<Grid
 					item
@@ -89,19 +93,8 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 						},
 					}}>
 					<Grid item sx={{ px: 0.5 }}>
-						<Typography variant='span'>{values.torneo.description}</Typography>
-					</Grid>
-					<Divider
-						sx={{ background: COLORS.secondary.main }}
-						orientation='vertical'
-						variant='middle'
-						flexItem
-					/>
-					<Grid item sx={{ px: 0.5 }}>
-						<Typography variant='span'>
-							{' '}
-							Fecha inicio:{' '}
-							{new Date(values.torneo.fecha_inicio).toLocaleString()}
+						<Typography sx={{ color: 'white' }} variant='span'>
+							{values.torneo.description}
 						</Typography>
 					</Grid>
 					<Divider
@@ -111,17 +104,32 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 						flexItem
 					/>
 					<Grid item sx={{ px: 0.5 }}>
-						<Typography variant='span'>
+						<Typography sx={{ color: 'white' }} variant='span'>
+							{' '}
+							Fecha inicio:{' '}
+							{new Date(values.torneo.fecha_inicio).toLocaleDateString()}
+						</Typography>
+					</Grid>
+					<Divider
+						sx={{ background: COLORS.secondary.main }}
+						orientation='vertical'
+						variant='middle'
+						flexItem
+					/>
+					<Grid item sx={{ px: 0.5 }}>
+						<Typography sx={{ color: 'white' }} variant='span'>
 							{' '}
 							Fecha fin registro:{' '}
-							{new Date(values.torneo.fecha_fin_registro).toLocaleString()}
+							{new Date(values.torneo.fecha_fin_registro).toLocaleDateString()}
 						</Typography>
 					</Grid>
 				</Grid>
 			</Grid>
 			{ganador && (
 				<Grid item container justifyContent='center' direction='row'>
-					<Typography variant='h5'>Ganador: {ganador.nombre}</Typography>
+					<Typography sx={{ color: 'white' }} variant='h5'>
+						Ganador: {ganador.nombre}
+					</Typography>
 				</Grid>
 			)}
 			<Grid
@@ -131,21 +139,31 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 				container
 				justifyContent='center'
 				direction='column'>
-				<Typography variant='h4'>Participantes </Typography>
+				<Typography sx={{ color: 'white' }} variant='h4'>
+					Participantes{' '}
+				</Typography>
 				<TableContainer>
 					<Table sx={{ overflowX: 'hidden' }}>
 						<TableHead>
 							<TableRow>
 								<TableCell></TableCell>
-								<TableCell>Nombre</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>Posicion</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>Puntaje</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>
+								<TableCell sx={{ color: 'white' }}>Nombre</TableCell>
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+									Posicion
+								</TableCell>
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+									Puntaje
+								</TableCell>
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
 									# Enfrentamientos
 								</TableCell>
-								<TableCell sx={{ textAlign: 'end' }}>Daño Total</TableCell>
+								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+									Daño Total
+								</TableCell>
 								{values.torneo.id_estado === 0 && (
-									<TableCell sx={{ textAlign: 'center' }}>Acciones</TableCell>
+									<TableCell sx={{ textAlign: 'center', color: 'white' }}>
+										Acciones
+									</TableCell>
 								)}
 							</TableRow>
 						</TableHead>
@@ -155,32 +173,47 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 									<TableRow key={index}>
 										{/* TFT */}
 										<TableCell>
-											<Avatar src={user.image ? user.image : AvatarImg} />
+											<Avatar src={element.image ? element.image : AvatarImg} />
 										</TableCell>
 										<TableCell>
-											<Typography variant='body2' component='span'>
+											<Typography
+												sx={{ color: 'white' }}
+												variant='body2'
+												component='span'>
 												{element.nombre}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
+											<Typography
+												sx={{ color: 'white' }}
+												variant='body2'
+												component='span'>
 												{element.posicion === -1
 													? 'Sin posicion'
 													: element.posicion}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
+											<Typography
+												sx={{ color: 'white' }}
+												variant='body2'
+												component='span'>
 												{element.puntaje_jugador}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
+											<Typography
+												sx={{ color: 'white' }}
+												variant='body2'
+												component='span'>
 												{element.no_enfrentamientos_jugados}
 											</Typography>
 										</TableCell>
 										<TableCell sx={{ textAlign: 'end' }}>
-											<Typography variant='body2' component='span'>
+											<Typography
+												sx={{ color: 'white' }}
+												variant='body2'
+												component='span'>
 												{element.total_damage}
 											</Typography>
 										</TableCell>

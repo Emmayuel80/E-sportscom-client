@@ -1,5 +1,5 @@
 import React from 'react';
-import DashboardOrganizadorInicio from '../components/DashboardOrganizador/DashboardOrganizadorInicio';
+import DashboardOrganizadorInicio from '../../components/DashboardOrganizador/DashboardOrganizadorInicio';
 
 export default function (token, torneoData, setResponseError, changeComponent) {
 	fetch(
@@ -20,7 +20,7 @@ export default function (token, torneoData, setResponseError, changeComponent) {
 		.then((response) => response.json())
 		.then((response) => {
 			if (response.err) {
-				setResponseError(response.msg);
+				setResponseError(response.err);
 			} else {
 				changeComponent(<DashboardOrganizadorInicio />);
 			}

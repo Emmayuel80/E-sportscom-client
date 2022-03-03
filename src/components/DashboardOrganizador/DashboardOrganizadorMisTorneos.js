@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Grid, Typography } from '@mui/material';
 // import CustomCard from '../CustomCard';
 import CardElement from '../CardElement';
-import getTorneosActivos from '../../services/getTorneosActivos';
+import getTorneosActivos from '../../services/organizador/getTorneosActivos';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
 const DashboardOrganizadorMisTorneos = () => {
 	const { user } = useContext(DashboardOrganizadorContext);
@@ -17,7 +17,9 @@ const DashboardOrganizadorMisTorneos = () => {
 	return (
 		<Grid container justifyContent='center'>
 			<Grid item xs={12}>
-				<Typography variant='h3'>Mis torneos activos</Typography>
+				<Typography sx={{ color: 'white' }} variant='h3'>
+					Mis torneos activos
+				</Typography>
 			</Grid>
 			<Grid
 				container
