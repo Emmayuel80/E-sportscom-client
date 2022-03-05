@@ -1,29 +1,74 @@
-import React, { useContext } from 'react';
-import { Button, Grid, List, ListItem } from '@mui/material';
-import CardInfo from '../CardInfo';
+import React from 'react';
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Grid,
+	TextField,
+} from '@mui/material';
+
 import DashBoardJugadorContext from '../../context/DashboardJugadorContext';
 import DashboardCrearEquipo from './DashboardCrearEquipo';
+import getEquipos from '../../services/jugador/getEquipos';
+import ResponseError from '../ResponseError';
+import CardEquipo from '../CardEquipo';
+import joinEquipo from '../../services/jugador/joinEquipo';
 
-const cardData = [
-	{ title: 'Equipo 1', jugadores: ['Juanito', 'Luis', 'Carlos'] },
-	{
-		title: 'Equipo 2',
-		jugadores: ['Juanito', 'Luis', 'Miguel', 'Carlos', 'Jose'],
-	},
-];
 const DashboardMisEquipos = () => {
-	const { changeComponent } = useContext(DashBoardJugadorContext);
+	// Context
+	const { changeComponent, user } = React.useContext(DashBoardJugadorContext);
+
+	// State
+	const [equipos, setEquipos] = React.useState([]);
+	const [values, setValues] = React.useState({ codigo: '' });
+	const [responseError, setResponseError] = React.useState(false);
+
+	// Handler
+	const handleChange = (prop) => (event) => {
+		setValues({ ...values, [prop]: event.target.value });
+	};
+	const [open, setOpen] = React.useState(false);
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const handleSubmit = async () => {
+		await joinEquipo(user, values.codigo, setResponseError, setOpen);
+		if (!responseError) {
+			await getEquipos(user, setEquipos, setResponseError);
+			setValues({ codigo: '' });
+		}
+		setValues({ codigo: '' });
+	};
+
+	// useEffect
+	React.useEffect(() => {
+		getEquipos(user, setEquipos, setResponseError);
+	}, []);
 
 	return (
-		<Grid container direction='column' justifyContent='center'>
+		<Grid item xs={12} container justifyContent='center' direction='row'>
 			<Grid
 				container
+				item
 				direction='row'
-				sx={{ px: 22 }}
+				sx={{}}
 				alignItems='center'
-				justifyContent=''>
+				justifyContent='space-around'
+				xs={12}>
 				<Grid item xs={2}>
-					<Button variant='contained' color='secondary'>
+					<Button
+						onClick={handleClickOpen}
+						variant='contained'
+						color='secondary'>
 						UNIRTE A UN EQUIPO
 					</Button>
 				</Grid>
@@ -39,24 +84,59 @@ const DashboardMisEquipos = () => {
 			<Grid
 				container
 				direction='row'
-				sx={{ overflow: 'auto' }}
+				sx={{ overflow: 'auto', marginTop: '1rem' }}
 				spacing={2}
 				alignItems='center'
 				justifyContent='center'>
-				<Grid container item xs={10}>
-					{cardData.map((element) => (
-						<Grid key={JSON.stringify(element)} item xs={4}>
-							<CardInfo data={element}>
-								<List dense>
-									{element.jugadores.map((jugador, index) => (
-										<ListItem key={jugador + index}>{jugador}</ListItem>
-									))}
-								</List>
-							</CardInfo>
-						</Grid>
-					))}
+				<Grid
+					item
+					container
+					justifyContent='space-around'
+					direction='row'
+					gap={2}>
+					{equipos &&
+						equipos.map((element) => (
+							<Grid
+								key={JSON.stringify(element)}
+								item
+								xs={12}
+								sm={12}
+								md={12}
+								lg={12}>
+								<CardEquipo data={element}></CardEquipo>
+							</Grid>
+						))}
+				</Grid>
+				<Grid item>
+					<ResponseError error={responseError}></ResponseError>
 				</Grid>
 			</Grid>
+			<Dialog open={open} onClose={handleClose}>
+				<DialogTitle sx={{ color: 'white' }}>Unirse a un equipo</DialogTitle>
+				<DialogContent>
+					<DialogContentText sx={{ color: 'white' }}>
+						Por favor introduce el código del equipo
+					</DialogContentText>
+					<TextField
+						color='secondary'
+						autoFocus
+						margin='dense'
+						label='Codigo de equipo'
+						type='text'
+						fullWidth
+						value={values.codigo ? values.codigo : ''}
+						onChange={handleChange('codigo')}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button color='secondary' variant='contained' onClick={handleClose}>
+						Cancelar
+					</Button>
+					<Button color='secondary' variant='contained' onClick={handleSubmit}>
+						Unirse
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Grid>
 	);
 };

@@ -231,10 +231,10 @@ const DashboardOrganizadorInicio = () => {
 							}}
 							data={{
 								color: '#fff',
-								labels: Object.values(ESTADOS).slice(0, 5),
+								labels: Object.values(ESTADOS).slice(0, 4),
 								datasets: [
 									{
-										data: estadoTorneosCalculo(data.torneosCreados).slice(0, 5),
+										data: estadoTorneosCalculo(data.torneosCreados).slice(0, 4),
 										backgroundColor: [
 											'rgba(255, 99, 132, 1)',
 											'rgba(255, 159, 64, 1)',

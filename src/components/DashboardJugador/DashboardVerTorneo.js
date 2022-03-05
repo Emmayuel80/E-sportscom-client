@@ -264,10 +264,10 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 						{'Error'}
 					</DialogTitle>
 					<DialogContent>
-						<DialogContentText
-							sx={{ color: 'white' }}
-							id='alert-dialog-description'>
-							No fue posible unirte al torneo: {responseError}
+						<DialogContentText id='alert-dialog-description'>
+							<Typography sx={{ color: 'white' }} variant='h5'>
+								No fue posible unirte al torneo: {responseError}
+							</Typography>
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
