@@ -6,7 +6,8 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-	Grid,
+	Grid,	
+	Skeleton,
 	TextField,
 } from '@mui/material';
 
@@ -81,36 +82,44 @@ const DashboardMisEquipos = () => {
 					</Button>
 				</Grid>
 			</Grid>
-			<Grid
-				container
-				direction='row'
-				sx={{ overflow: 'auto', marginTop: '1rem' }}
-				spacing={2}
-				alignItems='center'
-				justifyContent='center'>
+			{equipos ? (
 				<Grid
-					item
 					container
-					justifyContent='space-around'
 					direction='row'
-					gap={2}>
-					{equipos &&
-						equipos.map((element) => (
-							<Grid
-								key={JSON.stringify(element)}
-								item
-								xs={12}
-								sm={12}
-								md={12}
-								lg={12}>
-								<CardEquipo data={element}></CardEquipo>
-							</Grid>
-						))}
+					sx={{ overflow: 'auto', marginTop: '1rem' }}
+					spacing={2}
+					alignItems='center'
+					justifyContent='center'>
+					<Grid
+						item
+						container
+						justifyContent='space-around'
+						direction='row'
+						gap={2}>
+						{equipos &&
+							equipos.map((element) => (
+								<Grid
+									key={JSON.stringify(element)}
+									item
+									xs={12}
+									sm={12}
+									md={12}
+									lg={12}>
+									<CardEquipo data={element}></CardEquipo>
+								</Grid>
+							))}
+					</Grid>
+					<Grid item>
+						<ResponseError error={responseError}></ResponseError>
+					</Grid>
 				</Grid>
-				<Grid item>
-					<ResponseError error={responseError}></ResponseError>
+			) : (
+				<Grid item container justifyContent='space-around' direction='column'>
+					<Skeleton variant='rectangular' width={'80%'} height={200} />
+					<Skeleton width={'80%'} height={20} />
+					<Skeleton width={'80%'} height={20} />
 				</Grid>
-			</Grid>
+			)}
 			<Dialog open={open} onClose={handleClose}>
 				<DialogTitle sx={{ color: 'white' }}>Unirse a un equipo</DialogTitle>
 				<DialogContent>
@@ -127,6 +136,7 @@ const DashboardMisEquipos = () => {
 						value={values.codigo ? values.codigo : ''}
 						onChange={handleChange('codigo')}
 					/>
+					
 				</DialogContent>
 				<DialogActions>
 					<Button color='secondary' variant='contained' onClick={handleClose}>

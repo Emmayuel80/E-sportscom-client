@@ -7,7 +7,7 @@ import { CardActionArea, Grid } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import COLORS from '../constants/Colors.json';
 import PropTypes from 'prop-types';
-import AvatarImg from '../pngegg.png';
+
 import DashboardJugadordorContext from '../context/DashboardJugadorContext';
 // import DashboardOrganizadorVerTorneo from './DashboardOrganizador/DashboardOrganizadorVerTorneo';
 // import MaterialIcon from 'material-icons-react';
@@ -41,7 +41,7 @@ const CardEquipo = ({ data }) => {
 					<Grid container justifyContent='end' item xs={6}>
 						<Avatar
 							sx={{ width: 64, height: 64 }}
-							src={AvatarImg}
+							src={data.logo}
 							variant='rounded'
 							aria-label='recipe'></Avatar>
 					</Grid>

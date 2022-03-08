@@ -1,31 +1,171 @@
 import React from 'react';
-import { Grid, TextField, Typography } from '@mui/material';
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Grid,
+	ImageList,
+	ImageListItem,
+	TextField,
+	Typography,
+} from '@mui/material';
+import PublicForm from '../PublicForm';
+import ResponseError from '../ResponseError';
+import DashBoardJugadorContext from '../../context/DashboardJugadorContext';
+import createEquipo from '../../services/jugador/createEquipo';
 
 const DashboardCrearEquipo = () => {
+	const { user, changeComponent } = React.useContext(DashBoardJugadorContext);
+	const [values, setValues] = React.useState({
+		nombre: '',
+	});
+	const [logo, setLogo] = React.useState(null);
+	const [responseError, setResponseError] = React.useState(false);
+
+	// Handlers
+	const handleChange = (prop) => (event) => {
+		setValues({ ...values, [prop]: event.target.value });
+	};
+	const [open, setOpen] = React.useState(false);
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
 	return (
 		<Grid container direction='column' justifyContent='center'>
-			<Grid container direction='row' justifyContent='center'>
-				<Grid item xs={10}>
-					<Typography variant='h4' color='secondary'>
-						CREAR NUEVO EQUIPO
-					</Typography>
+			<PublicForm>
+				<Grid container direction='row' justifyContent='center'>
+					<Grid item xs={10}>
+						<Typography variant='h4' color='primary'>
+							CREAR NUEVO EQUIPO
+						</Typography>
+					</Grid>
 				</Grid>
-			</Grid>
 
-			<Grid container direction='row' justifyContent='center' sx={{ py: 2 }}>
 				<Grid
-					item
-					xs={10}
-					sx={{ borderRadius: 1, backgroundColor: 'white', p: 1.5 }}>
-					<TextField
-						id='outlined-basic'
-						label='Nombre del equipo'
-						variant='outlined'
-						color='primary'
-						fullWidth
-					/>
+					container
+					direction='row'
+					justifyContent='space-around'
+					sx={{ py: 2 }}>
+					<Grid sx={{ py: 5 }} item xs={10}>
+						<TextField
+							id='outlined-basic'
+							label='Nombre del equipo'
+							variant='outlined'
+							color='primary'
+							value={values.nombre}
+							onChange={handleChange('nombre')}
+							fullWidth
+						/>
+					</Grid>
+					{logo && (
+						<Grid sx={{ pb: 5 }} container justifyContent='space-around'>
+							<Typography variant='h4'>Logo: </Typography>
+							<img
+								style={{ height: 'auto', width: 'auto' }}
+								src={logo}
+								alt={'Logo'}
+							/>
+						</Grid>
+					)}
+					<Grid item sx={{ pb: 3 }} xs={10}>
+						<Button
+							onClick={(e) => setOpen(true)}
+							fullWidth
+							variant='outlined'
+							color='primary'>
+							Seleccionar logo
+						</Button>
+					</Grid>
+					<Grid item sx={{ pb: 2 }} xs={10}>
+						<Button
+							onClick={(e) =>
+								createEquipo(
+									user,
+									{ nombre: values.nombre, logo: logo },
+									setResponseError,
+									changeComponent
+								)
+							}
+							fullWidth
+							variant='contained'
+							color='primary'>
+							Crear equipo
+						</Button>
+					</Grid>
 				</Grid>
-			</Grid>
+				<ResponseError error={responseError} />
+			</PublicForm>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				aria-labelledby='alert-dialog-title'
+				aria-describedby='alert-dialog-description'>
+				<DialogTitle
+					sx={{ color: 'white', fontWeight: 'bold' }}
+					id='alert-dialog-title'>
+					{'Selecciona un logo'}
+				</DialogTitle>
+				<DialogContent>
+					<ImageList cols={3} gap={25}>
+						{Array(9)
+							.fill()
+							.map((item, index) => {
+								return (
+									<ImageListItem
+										sx={{
+											width: 'auto',
+											height: 'auto',
+										}}
+										onClick={(e) =>
+											setLogo(`/assets/team-icons/logo${index}.png`)
+										}
+										key={index}>
+										<img
+											draggable='false'
+											style={{
+												height: 'auto',
+												width: 'auto',
+												userDrag: 'none',
+											}}
+											src={`/assets/team-icons/logo${index}.png`}
+											alt={`logo${index}`}
+										/>
+									</ImageListItem>
+								);
+							})}
+					</ImageList>
+					{logo && (
+						<Grid container justifyContent='space-around'>
+							<Typography sx={{ color: 'white' }} variant='h4'>
+								Seleccionado:{' '}
+							</Typography>
+							<img
+								style={{ height: 'auto', width: 'auto' }}
+								src={logo}
+								alt={logo}
+							/>
+						</Grid>
+					)}
+					<a
+						style={{ textDecoration: 'none', color: 'white', fontSize: '10px' }}
+						href='https://www.vecteezy.com/free-vector/sports-logo'>
+						Sports Logo Vectors by Vecteezy
+					</a>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={(e) => setOpen(false)}
+						autoFocus>
+						Confirmar
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Grid>
 	);
 };
