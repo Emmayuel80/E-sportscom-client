@@ -9,6 +9,7 @@ import COLORS from '../constants/Colors.json';
 import PropTypes from 'prop-types';
 
 import DashboardJugadordorContext from '../context/DashboardJugadorContext';
+import DashboardVerEquipo from './DashboardJugador/DashboardVerEquipo';
 // import DashboardOrganizadorVerTorneo from './DashboardOrganizador/DashboardOrganizadorVerTorneo';
 // import MaterialIcon from 'material-icons-react';
 // import DashboardOrganizadorEditarTorneo from './DashboardOrganizador/DashboardOrganizadorEditarTorneo';
@@ -23,7 +24,13 @@ const CardEquipo = ({ data }) => {
 				minWidth: 310,
 				borderRadius: '1rem',
 			}}>
-			<CardActionArea onClick={(e) => changeComponent(<></>)} sx={{ p: 2 }}>
+			<CardActionArea
+				onClick={(e) =>
+					changeComponent(
+						<DashboardVerEquipo idEquipo={data.id_equipo}></DashboardVerEquipo>
+					)
+				}
+				sx={{ p: 2 }}>
 				<Grid
 					sx={{ py: 1.5, px: 1.5 }}
 					justifyContent='space-between'

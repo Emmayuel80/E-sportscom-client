@@ -20,6 +20,7 @@ import DashboardEditProfile from '../components/DashboardJugador/DashboardEditPr
 import PropTypes from 'prop-types';
 import Logout from '../services/logout';
 import DashboardBuscarTorneos from '../components/DashboardJugador/DashboardBuscarTorneos';
+
 const DashboardJugador = (props) => {
 	const { window } = props;
 	const {

@@ -6,7 +6,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-	Grid,	
+	Grid,
 	Skeleton,
 	TextField,
 } from '@mui/material';
@@ -136,7 +136,6 @@ const DashboardMisEquipos = () => {
 						value={values.codigo ? values.codigo : ''}
 						onChange={handleChange('codigo')}
 					/>
-					
 				</DialogContent>
 				<DialogActions>
 					<Button color='secondary' variant='contained' onClick={handleClose}>
