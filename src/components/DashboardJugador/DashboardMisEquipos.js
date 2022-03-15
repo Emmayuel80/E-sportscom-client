@@ -9,6 +9,7 @@ import {
 	Grid,
 	Skeleton,
 	TextField,
+	Typography,
 } from '@mui/material';
 
 import DashBoardJugadorContext from '../../context/DashboardJugadorContext';
@@ -26,19 +27,21 @@ const DashboardMisEquipos = () => {
 	const [equipos, setEquipos] = React.useState([]);
 	const [values, setValues] = React.useState({ codigo: '' });
 	const [responseError, setResponseError] = React.useState(false);
+	const [open, setOpen] = React.useState(false);
 
 	// Handler
 	const handleChange = (prop) => (event) => {
 		setValues({ ...values, [prop]: event.target.value });
 	};
-	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
 		setOpen(true);
+		setValues({ codigo: '' });
 	};
 
 	const handleClose = () => {
 		setOpen(false);
+		setValues({ codigo: '' });
 	};
 
 	const handleSubmit = async () => {
@@ -96,7 +99,7 @@ const DashboardMisEquipos = () => {
 						justifyContent='space-around'
 						direction='row'
 						gap={2}>
-						{equipos &&
+						{equipos.length > 0 ? (
 							equipos.map((element) => (
 								<Grid
 									key={JSON.stringify(element)}
@@ -107,10 +110,14 @@ const DashboardMisEquipos = () => {
 									lg={12}>
 									<CardEquipo data={element}></CardEquipo>
 								</Grid>
-							))}
-					</Grid>
-					<Grid item>
-						<ResponseError error={responseError}></ResponseError>
+							))
+						) : (
+							<Grid item xs={12}>
+								<Typography variant='h5' sx={{ color: 'white' }}>
+									No tienes equipos
+								</Typography>
+							</Grid>
+						)}
 					</Grid>
 				</Grid>
 			) : (
@@ -120,6 +127,9 @@ const DashboardMisEquipos = () => {
 					<Skeleton width={'80%'} height={20} />
 				</Grid>
 			)}
+			<Grid item>
+				<ResponseError error={responseError}></ResponseError>
+			</Grid>
 			<Dialog open={open} onClose={handleClose}>
 				<DialogTitle sx={{ color: 'white' }}>Unirse a un equipo</DialogTitle>
 				<DialogContent>

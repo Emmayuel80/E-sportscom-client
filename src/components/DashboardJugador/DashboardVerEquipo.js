@@ -22,6 +22,7 @@ import getEquipo from '../../services/jugador/getEquipo';
 import CopyToClipboard from '../CopyToClipboard';
 import DashboardEditEquipo from './DashboardEditEquipo';
 
+// TODO
 const capitan = true;
 const DashboardVerEquipo = ({ idEquipo }) => {
 	// Context

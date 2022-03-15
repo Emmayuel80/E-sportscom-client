@@ -4,6 +4,7 @@ import DashBoardJugadorContext from '../context/DashboardJugadorContext';
 import DashboardBuscarTorneos from './DashboardJugador/DashboardBuscarTorneos';
 import DashboardMisEquipos from './DashboardJugador/DashboardMisEquipos';
 import DashboardVerMisTorneosInscritos from './DashboardJugador/DashboardVerMisTorneosInscritos';
+import DashboardHistorialTorneos from './DashboardJugador/DashboardHistorialTorneos';
 const buttonExtraStyles = {
 	fontSize: 20,
 };
@@ -32,7 +33,7 @@ const OpcionesJugador = () => {
 				color='secondary'>
 				Ver torneos inscritos
 			</Button>
-			<Button sx={buttonExtraStyles} variant='text' color='secondary'>
+			<Button sx={buttonExtraStyles} onClick={(e) => changeComponent(<DashboardHistorialTorneos />)} variant='text' color='secondary'>
 				Historial de torneos
 			</Button>
 			<Button
@@ -42,7 +43,8 @@ const OpcionesJugador = () => {
 				color='secondary'>
 				Mis equipos
 			</Button>
-			<Button sx={buttonExtraStyles} variant='text' color='secondary'>
+			<Button sx={buttonExtraStyles}
+			 variant='text' color='secondary'>
 				Ver bitacora
 			</Button>
 		</Grid>

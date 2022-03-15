@@ -6,12 +6,19 @@ import {
 	Pagination,
 	Skeleton,
 	Typography,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
 } from '@mui/material';
 import CardElementJugador from '../CardElementJugador';
 import getTorneosActivos from '../../services/jugador/getTorneosActivos';
 import DashBoardJugadorContext from '../../context/DashboardJugadorContext';
 // import IconButton from '@mui/material/IconButton';
 import MaterialIcon from 'material-icons-react';
+import getTournamentByCode from '../../services/jugador/getTournamentByCode';
+import ResponseError from '../ResponseError';
 // const cardData = [
 // 	{ nombre: 'Torneo 1', id_juego: '2', description: 'lorem' },
 // 	{ nombre: 'Torneo 2', id_juego: '2', description: 'lorem' },
@@ -22,10 +29,36 @@ import MaterialIcon from 'material-icons-react';
 // ];
 const cantidad = 6;
 const DashboardVerJugador = () => {
-	const { user } = React.useContext(DashBoardJugadorContext);
+	// Context
+	const { user, changeComponent } = React.useContext(DashBoardJugadorContext);
+
+	// State
 	const [searchValue, setSearchValue] = React.useState('');
 	const [torneos, setTorneos] = React.useState({});
 	const [paginationCount, setPaginationCount] = React.useState(0);
+	const [values, setValues] = React.useState({ codigo: '' });
+	const [responseError, setResponseError] = React.useState(false);
+	const [open, setOpen] = React.useState(false);
+
+	// Handlers
+	const handleClose = () => {
+		setOpen(false);
+		setValues({ codigo: '' });
+	};
+
+	const handleSubmit = () => {
+		getTournamentByCode(
+			user.token,
+			values.codigo,
+			setResponseError,
+			changeComponent
+		);
+		setValues({ codigo: '' });
+		setOpen(false);
+	};
+	const handleChange = (prop) => (event) => {
+		setValues({ ...values, [prop]: event.target.value });
+	};
 	const handleSearchChange = (event) => {
 		setSearchValue(event.target.value);
 		if (event.key === 'Enter') {
@@ -44,6 +77,8 @@ const DashboardVerJugador = () => {
 	const handleSearch = () => {
 		getTorneosActivos(0, cantidad, user, setTorneos, searchValue);
 	};
+
+	// useEffect
 	React.useEffect(() => {
 		// tournaments/:inicio/:cantidad
 		if (user.token) {
@@ -103,8 +138,11 @@ const DashboardVerJugador = () => {
 			</Grid>
 			<Grid container direction='row' justifyContent='center'>
 				<Grid item xs={10} sx={{ py: 2 }}>
-					<Button variant='contained' color='secondary'>
-						UNIRSE POR CODIGO
+					<Button
+						onClick={(e) => setOpen(true)}
+						variant='contained'
+						color='secondary'>
+						BUSCAR POR CÓDIGO
 					</Button>
 				</Grid>
 			</Grid>
@@ -172,6 +210,37 @@ const DashboardVerJugador = () => {
 					)}
 				</Grid>
 			</Grid>
+			<Grid item>
+				<ResponseError error={responseError}></ResponseError>
+			</Grid>
+			<Dialog open={open} onClose={handleClose}>
+				<DialogTitle sx={{ color: 'white' }}>
+					Buscar torneo por código
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText sx={{ color: 'white' }}>
+						Por favor introduce el código del torneo
+					</DialogContentText>
+					<TextField
+						color='secondary'
+						autoFocus
+						margin='dense'
+						label='Codigo de torneo'
+						type='text'
+						fullWidth
+						value={values.codigo ? values.codigo : ''}
+						onChange={handleChange('codigo')}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button color='secondary' variant='contained' onClick={handleClose}>
+						Cancelar
+					</Button>
+					<Button color='secondary' variant='contained' onClick={handleSubmit}>
+						Unirse
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Grid>
 	);
 };

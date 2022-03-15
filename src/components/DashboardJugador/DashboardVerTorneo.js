@@ -45,6 +45,20 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
+	const handleUnirseTorneo = () => {
+		if (values?.id_juego === 2) {
+			unirseTorneoTFT(
+				user,
+				values.torneo.id_torneo,
+				setResponseError,
+				handleClickOpen
+			);
+		} else if (values?.id_juego === 1) {
+			// dialog
+		}
+	};
+
 	// UseEffect
 	React.useEffect(() => {
 		getDataTorneo(user.token, idTorneo, setResponseError, setValues);
@@ -146,42 +160,31 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 					</Typography>
 				</Grid>
 			)}
+			<Grid container alignContent='start' item xs={12}>
+				{!values.torneo.participantes.some(
+					(value) => value.id_usuario === user.id_usuario
+				) && (
+					<Button
+						onClick={handleUnirseTorneo}
+						variant='contained'
+						color='secondary'>
+						UNIRSE AL TORNEO
+					</Button>
+				)}
+			</Grid>
+
+			<Grid item xs={12}>
+				<Typography sx={{ color: 'white' }} variant='h4'>
+					Participantes{' '}
+				</Typography>
+			</Grid>
 			<Grid
 				sx={{ width: '80vw' }}
 				xs={12}
 				item
 				container
-				justifyContent='center'
+				justifyContent='start'
 				direction='column'>
-				<Grid
-					item
-					xs={4}
-					container
-					direction='row'
-					justifyContent='start'
-					alignItems='center'>
-					{!values.torneo.participantes.some(
-						(value) => value.id_usuario === user.id_usuario
-					) && (
-						<Button
-							onClick={(e) =>
-								unirseTorneoTFT(
-									user,
-									values.torneo.id_torneo,
-									setResponseError,
-									handleClickOpen
-								)
-							}
-							variant='contained'
-							color='secondary'>
-							UNIRSE AL TORNEO
-						</Button>
-					)}
-				</Grid>
-
-				<Typography sx={{ color: 'white' }} variant='h4'>
-					Participantes{' '}
-				</Typography>
 				<TableContainer>
 					<Table sx={{ overflowX: 'hidden' }}>
 						<TableHead>
