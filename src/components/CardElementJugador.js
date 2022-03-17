@@ -9,7 +9,8 @@ import COLORS from '../constants/Colors.json';
 import JUEGOS from '../constants/Juegos.json';
 import PropTypes from 'prop-types';
 import DashboardJugadordorContext from '../context/DashboardJugadorContext';
-import DashboardVerTorneo from './DashboardJugador/DashboardVerTorneo';
+import DashboardVerTorneoTFT from './DashboardJugador/DashboardVerTorneoTFT';
+import DashboardVerTorneoLOL from './DashboardJugador/DashboardVerTorneoLOL';
 // import DashboardOrganizadorVerTorneo from './DashboardOrganizador/DashboardOrganizadorVerTorneo';
 // import MaterialIcon from 'material-icons-react';
 // import DashboardOrganizadorEditarTorneo from './DashboardOrganizador/DashboardOrganizadorEditarTorneo';
@@ -17,6 +18,7 @@ import DashboardVerTorneo from './DashboardJugador/DashboardVerTorneo';
 const CardElement = ({ data }) => {
 	// console.log(data);
 	const { changeComponent } = React.useContext(DashboardJugadordorContext);
+	// console.log(data);
 	return (
 		<Card
 			sx={{
@@ -27,7 +29,13 @@ const CardElement = ({ data }) => {
 			<CardActionArea
 				onClick={(e) =>
 					changeComponent(
-						<DashboardVerTorneo idTorneo={data.id_torneo}></DashboardVerTorneo>
+						data.id_juego === 1 ? (
+							<DashboardVerTorneoLOL
+								idTorneo={data.id_torneo}></DashboardVerTorneoLOL>
+						) : (
+							<DashboardVerTorneoTFT
+								idTorneo={data.id_torneo}></DashboardVerTorneoTFT>
+						)
 					)
 				}
 				sx={{ p: 2 }}>

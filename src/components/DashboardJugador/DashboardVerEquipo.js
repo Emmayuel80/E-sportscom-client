@@ -21,22 +21,38 @@ import AvatarImg from '../../pngegg.png';
 import getEquipo from '../../services/jugador/getEquipo';
 import CopyToClipboard from '../CopyToClipboard';
 import DashboardEditEquipo from './DashboardEditEquipo';
+import kickPlayerFromTeam from '../../services/jugador/kickPlayerFromTeam';
 
 // TODO
-const capitan = true;
+// const capitan = true;
 const DashboardVerEquipo = ({ idEquipo }) => {
 	// Context
 	const { user, changeComponent } = React.useContext(DashBoardJugadorContext);
 	// States
 	const [values, setValues] = React.useState(null);
 	const [responseError, setResponseError] = React.useState(false);
+	const [isCaptain, setIsCaptain] = React.useState(false);
 	const [openClipboard, setOpenClipboard] = React.useState(false);
+	const [disableAll, setDisableAll] = React.useState(false);
 	// Handlers
 
 	// UseEffect
 	React.useEffect(() => {
 		getEquipo(user, idEquipo, setValues, setResponseError);
 	}, []);
+
+	React.useEffect(() => {
+		if (values) {
+			const capitan = values.jugadores.filter(
+				(jugador) => jugador.id_usuario === user.id_usuario && jugador.capitan
+			);
+			if (capitan.length > 0) {
+				setIsCaptain(true);
+			} else {
+				setIsCaptain(false);
+			}
+		}
+	}, [values]);
 
 	return !values ? (
 		<Grid item></Grid>
@@ -60,20 +76,22 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 						<Typography sx={{ color: 'white' }} variant='h2'>
 							{values.equipo.nombre}
 						</Typography>
-						<IconButton
-							onClick={(e) =>
-								changeComponent(
-									<DashboardEditEquipo
-										idEquipo={idEquipo}
-										nombre={values.equipo.nombre}
-										logoBefore={values.equipo.logo}></DashboardEditEquipo>
-								)
-							}
-							size='large'
-							aria-label='close'
-							color='primary'>
-							<MaterialIcon icon='edit'></MaterialIcon>
-						</IconButton>
+						{isCaptain && (
+							<IconButton
+								onClick={(e) =>
+									changeComponent(
+										<DashboardEditEquipo
+											idEquipo={idEquipo}
+											nombre={values.equipo.nombre}
+											logoBefore={values.equipo.logo}></DashboardEditEquipo>
+									)
+								}
+								size='large'
+								aria-label='close'
+								color='primary'>
+								<MaterialIcon icon='edit'></MaterialIcon>
+							</IconButton>
+						)}
 					</Grid>
 				</Grid>
 				<Grid container alignItems='center' justifyContent='end' item xs={6}>
@@ -111,7 +129,7 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 								<TableCell></TableCell>
 								<TableCell sx={{ color: 'white' }}>Nombre</TableCell>
 								<TableCell sx={{ color: 'white' }}>Nombre Invocador</TableCell>
-								{capitan && (
+								{isCaptain && (
 									<TableCell sx={{ textAlign: 'center', color: 'white' }}>
 										Acciones
 									</TableCell>
@@ -144,13 +162,30 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 													{element.nombre_invocador}
 												</Typography>
 											</TableCell>
-											{capitan && (
+											{isCaptain && (
 												<TableCell sx={{ textAlign: 'center' }}>
-													<Tooltip title='Expulsar jugador'>
-														<IconButton>
-															<MaterialIcon icon='person_off'></MaterialIcon>
-														</IconButton>
-													</Tooltip>
+													{!element.capitan && (
+														<Tooltip title='Expulsar jugador'>
+															{!disableAll ? (
+																<IconButton
+																	onClick={(e) =>
+																		kickPlayerFromTeam(
+																			user.token,
+																			element.id_usuario,
+																			idEquipo,
+																			setResponseError,
+																			values,
+																			setValues,
+																			setDisableAll
+																		)
+																	}>
+																	<MaterialIcon icon='person_off'></MaterialIcon>
+																</IconButton>
+															) : (
+																<Grid></Grid>
+															)}
+														</Tooltip>
+													)}
 												</TableCell>
 											)}
 										</TableRow>
