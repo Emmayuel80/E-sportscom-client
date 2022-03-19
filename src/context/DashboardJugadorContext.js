@@ -13,10 +13,17 @@ const DashboardJugadorProvider = ({ children }) => {
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
-	  };  
-  
+	};
 
-	const data = { Component, changeComponent, setUser, user,  mobileOpen, setMobileOpen, handleDrawerToggle };
+	const data = {
+		Component,
+		changeComponent,
+		setUser,
+		user,
+		mobileOpen,
+		setMobileOpen,
+		handleDrawerToggle,
+	};
 
 	return (
 		<DashBoardJugadorContext.Provider value={data}>

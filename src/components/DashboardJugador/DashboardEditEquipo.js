@@ -14,14 +14,16 @@ import {
 import PublicForm from '../PublicForm';
 import ResponseError from '../ResponseError';
 import DashBoardJugadorContext from '../../context/DashboardJugadorContext';
-import createEquipo from '../../services/jugador/createEquipo';
+import editEquipo from '../../services/jugador/editEquipo';
+import PropTypes from 'prop-types';
 
-const DashboardCrearEquipo = () => {
+const DashboardEditEquipo = ({ idEquipo, nombre, logoBefore }) => {
 	const { user, changeComponent } = React.useContext(DashBoardJugadorContext);
 	const [values, setValues] = React.useState({
-		nombre: '',
+		nombre: nombre,
+		id_equipo: idEquipo,
 	});
-	const [logo, setLogo] = React.useState(null);
+	const [logo, setLogo] = React.useState(logoBefore);
 	const [responseError, setResponseError] = React.useState(false);
 
 	// Handlers
@@ -40,7 +42,7 @@ const DashboardCrearEquipo = () => {
 				<Grid container direction='row' justifyContent='center'>
 					<Grid item xs={10}>
 						<Typography variant='h4' color='primary'>
-							CREAR NUEVO EQUIPO
+							EDITAR EQUIPO
 						</Typography>
 					</Grid>
 				</Grid>
@@ -83,9 +85,13 @@ const DashboardCrearEquipo = () => {
 					<Grid item sx={{ pb: 2 }} xs={10}>
 						<Button
 							onClick={(e) =>
-								createEquipo(
+								editEquipo(
 									user,
-									{ nombre: values.nombre, logo: logo },
+									{
+										id_equipo: values.id_equipo,
+										nombre: values.nombre,
+										logo: logo,
+									},
 									setResponseError,
 									changeComponent
 								)
@@ -93,7 +99,7 @@ const DashboardCrearEquipo = () => {
 							fullWidth
 							variant='contained'
 							color='primary'>
-							Crear equipo
+							Guardar equipo
 						</Button>
 					</Grid>
 				</Grid>
@@ -169,5 +175,9 @@ const DashboardCrearEquipo = () => {
 		</Grid>
 	);
 };
-
-export default DashboardCrearEquipo;
+DashboardEditEquipo.propTypes = {
+	nombre: PropTypes.string,
+	idEquipo: PropTypes.number,
+	logoBefore: PropTypes.string,
+};
+export default DashboardEditEquipo;

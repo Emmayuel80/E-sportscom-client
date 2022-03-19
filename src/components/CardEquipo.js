@@ -6,19 +6,17 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea, Grid } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import COLORS from '../constants/Colors.json';
-import JUEGOS from '../constants/Juegos.json';
 import PropTypes from 'prop-types';
+
 import DashboardJugadordorContext from '../context/DashboardJugadorContext';
-import DashboardVerTorneoTFT from './DashboardJugador/DashboardVerTorneoTFT';
-import DashboardVerTorneoLOL from './DashboardJugador/DashboardVerTorneoLOL';
+import DashboardVerEquipo from './DashboardJugador/DashboardVerEquipo';
 // import DashboardOrganizadorVerTorneo from './DashboardOrganizador/DashboardOrganizadorVerTorneo';
 // import MaterialIcon from 'material-icons-react';
 // import DashboardOrganizadorEditarTorneo from './DashboardOrganizador/DashboardOrganizadorEditarTorneo';
 
-const CardElement = ({ data }) => {
+const CardEquipo = ({ data }) => {
 	// console.log(data);
 	const { changeComponent } = React.useContext(DashboardJugadordorContext);
-	// console.log(data);
 	return (
 		<Card
 			sx={{
@@ -29,13 +27,7 @@ const CardElement = ({ data }) => {
 			<CardActionArea
 				onClick={(e) =>
 					changeComponent(
-						data.id_juego === 1 ? (
-							<DashboardVerTorneoLOL
-								idTorneo={data.id_torneo}></DashboardVerTorneoLOL>
-						) : (
-							<DashboardVerTorneoTFT
-								idTorneo={data.id_torneo}></DashboardVerTorneoTFT>
-						)
+						<DashboardVerEquipo idEquipo={data.id_equipo}></DashboardVerEquipo>
 					)
 				}
 				sx={{ p: 2 }}>
@@ -52,44 +44,22 @@ const CardElement = ({ data }) => {
 							variant='h5'>
 							{data.nombre}
 						</Typography>
-						<Typography sx={{ fontSize: '0.8rem' }} variant='span'>
-							{JUEGOS[data.id_juego]}
-						</Typography>
 					</Grid>
 					<Grid container justifyContent='end' item xs={6}>
 						<Avatar
 							sx={{ width: 64, height: 64 }}
-							src='/assets/landing2.jpg'
+							src={data.logo}
 							variant='rounded'
 							aria-label='recipe'></Avatar>
 					</Grid>
 				</Grid>
-				<CardContent sx={{ py: 0 }}>
-					<Typography
-						sx={{
-							textAlign: 'justify',
-							height: '6rem',
-						}}
-						variant='body2'
-						color='text.secondary'>
-						{data.description}
-					</Typography>
-					<Typography
-						sx={{
-							textAlign: 'justify',
-						}}
-						variant='body2'
-						color='text.secondary'>
-						Fin registro:{' '}
-						{new Date(data.fecha_fin_registro).toLocaleString().split(' ')[0]}
-					</Typography>
-				</CardContent>
+				<CardContent sx={{ py: 0 }}></CardContent>
 			</CardActionArea>
 		</Card>
 	);
 };
-CardElement.propTypes = {
+CardEquipo.propTypes = {
 	edicionHabilitada: PropTypes.any,
 	data: PropTypes.any,
 };
-export default CardElement;
+export default CardEquipo;
