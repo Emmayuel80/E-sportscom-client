@@ -22,7 +22,7 @@ import COLORS from '../../constants/Colors.json';
 import AvatarImg from '../../pngegg.png';
 import MaterialIcon from 'material-icons-react';
 import expulsarJugador from '../../services/organizador/expulsarJugador';
-const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
+const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 	// Context
 	const { user } = React.useContext(DashboardOrganizadorContext);
 	// States
@@ -230,7 +230,7 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 																setResponseError,
 																values,
 																setValues,
-																setDisableAll
+																setDisableAll,																
 															)
 														}>
 														<MaterialIcon icon='person_off'></MaterialIcon>
@@ -251,8 +251,8 @@ const DashboardOrganizadorVerTorneo = ({ idTorneo }) => {
 		</Grid>
 	);
 };
-DashboardOrganizadorVerTorneo.propTypes = {
+DashboardOrganizadorVerTorneoTFT.propTypes = {
 	idTorneo: PropTypes.any,
 };
 
-export default DashboardOrganizadorVerTorneo;
+export default DashboardOrganizadorVerTorneoTFT;
