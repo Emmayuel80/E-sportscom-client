@@ -63,6 +63,7 @@ const Login = () => {
 				if (response.error) {
 					setResponseError(response.error);
 				} else {
+					response.data.riot_api = JSON.parse(response.data.riot_api);
 					localStorage.setItem('data', JSON.stringify(response.data));
 					if (response.data.tipo === 'jugador') {
 						window.location.href = '/dashboardJugador';

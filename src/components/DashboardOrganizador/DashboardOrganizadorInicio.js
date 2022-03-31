@@ -15,6 +15,7 @@ import {
 import JUEGOS from '../../constants/Juegos.json';
 import ESTADOS from '../../constants/Estados.json';
 import estadoTorneosCalculo from '../../services/organizador/estadoTorneosCalculo';
+import CopyToClipboard from '../CopyToClipboard';
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -32,6 +33,7 @@ const textStyle = {
 const DashboardOrganizadorInicio = () => {
 	const [data, setData] = React.useState({});
 	const { user } = useContext(DashboardOrganizadorContext);
+	const [open, setOpen] = React.useState(false);
 
 	React.useEffect(() => {
 		if (user.token) {
@@ -73,21 +75,27 @@ const DashboardOrganizadorInicio = () => {
 					justifyContent='space-around'
 					alignItems='center'
 					direction='row'>
-					<CircularDisplay
-						data={{
-							value: data.torneosActivos?.length,
-							description: 'Torneos Activos',
-						}}></CircularDisplay>
-					<CircularDisplay
-						data={{
-							value: data.torneosCreados?.length,
-							description: 'Torneos Creados',
-						}}></CircularDisplay>
-					<CircularDisplay
-						data={{
-							value: data.torneosActivos?.length,
-							description: 'Torneos de juegos',
-						}}></CircularDisplay>
+					<Grid item xs={12} xl={4}>
+						<CircularDisplay
+							data={{
+								value: data.torneosActivos?.length,
+								description: 'Torneos Activos',
+							}}></CircularDisplay>
+					</Grid>
+					<Grid item xs={12} xl={4}>
+						<CircularDisplay
+							data={{
+								value: data.torneosCreados?.length,
+								description: 'Torneos Creados',
+							}}></CircularDisplay>
+					</Grid>
+					<Grid item xs={12} xl={4}>
+						<CircularDisplay
+							data={{
+								value: data.torneosActivos?.length,
+								description: 'Torneos de juegos',
+							}}></CircularDisplay>
+					</Grid>
 				</Grid>
 				<Grid item xs={12} sx={{ py: 4 }}>
 					<Grid item xs={12}>
@@ -134,6 +142,14 @@ const DashboardOrganizadorInicio = () => {
 								{data.latestTorneoCreado
 									? data.latestTorneoCreado[0]?.codigo_torneo
 									: '-'}
+								{data.latestTorneoCreado && (
+									<CopyToClipboard
+										open={open}
+										setOpen={setOpen}
+										copy={
+											data.latestTorneoCreado[0]?.codigo_torneo
+										}></CopyToClipboard>
+								)}
 							</Typography>
 						</Grid>
 					</Grid>

@@ -20,6 +20,7 @@ import DashboardEditProfile from '../components/DashboardJugador/DashboardEditPr
 import PropTypes from 'prop-types';
 import Logout from '../services/logout';
 import DashboardBuscarTorneos from '../components/DashboardJugador/DashboardBuscarTorneos';
+import DashboardVerPerfil from '../components/DashboardJugador/DashboardVerPerfil';
 
 const DashboardJugador = (props) => {
 	const { window } = props;
@@ -106,7 +107,10 @@ const DashboardJugador = (props) => {
 					}}
 					transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 					anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-					<MenuItem>
+					<MenuItem
+						onClick={(e) =>
+							changeComponent(<DashboardVerPerfil></DashboardVerPerfil>)
+						}>
 						<Avatar src={user.image ? user.image : AvatarImg} />{' '}
 						{user.nombre_invocador}
 					</MenuItem>

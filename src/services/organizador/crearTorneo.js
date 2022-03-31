@@ -13,8 +13,7 @@ export default function crearTorneo(
 	const body = {
 		nombre: datos.nombreTorneo,
 		id_juego: datos.idJuego,
-		no_equipos: datos.idJuego === '1' ? datos.noEquipos : null,
-		no_enfrentamientos: datos.idJuego === '2' ? datos.noEnfrentamientos : null,
+		no_equipos: datos.noEquipos,
 		fecha_fin_registro: fechaFinRegistro.toString(),
 		fecha_inicio: fechaInicio.toString(),
 		premio: datos.premio,
