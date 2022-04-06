@@ -117,6 +117,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 										onChange={handleChange('noEquipos')}>
 										<MenuItem value={8}>8 Jugadores</MenuItem>
 										<MenuItem value={16}>16 Jugadores</MenuItem>
+										<MenuItem value={32}>32 Jugadores</MenuItem>
 									</Select>
 								</FormControl>
 							</Grid>

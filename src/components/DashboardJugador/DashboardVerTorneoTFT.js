@@ -27,6 +27,9 @@ import AvatarImg from '../../pngegg.png';
 import unirseTorneoTFT from '../../services/jugador/unirseTorneoTFT.js';
 import DashboardBuscarTorneos from './DashboardBuscarTorneos';
 import DashboardVerMisTorneosInscritos from './DashboardVerMisTorneosInscritos';
+import CardEnfrentamientoTFT from '../CardEnfrentamientoTFT.js';
+import getEnfrentamientosJugador from '../../services/jugador/getEnfrentamientosJugador.js';
+import DashboardVerEnfrentamientoTFT from './DashboardVerEnfrentamientoTFT.js';
 const DashboardVerTorneo = ({ idTorneo }) => {
 	// Context
 	const { user, changeComponent } = React.useContext(DashboardJugadorContext);
@@ -34,6 +37,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 	const [values, setValues] = React.useState(null);
 	const [responseError, setResponseError] = React.useState(false);
 	const [ganador, setGanador] = React.useState(null);
+	const [enfrentamientos, setEnfrentamientos] = React.useState(null);
 
 	const [open, setOpen] = React.useState(false);
 
@@ -67,7 +71,9 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 	React.useEffect(() => {
 		if (values) {
 			console.log(values);
-			if (values.torneo.id_estado === 4) {
+			if (values.torneo.id_estado === 2) {
+				getEnfrentamientosJugador(user.token, idTorneo, setEnfrentamientos);
+			} else if (values.torneo.id_estado === 4) {
 				console.log(`id_edo: ${values.torneo.id_estado}`);
 				const firstPos = values.participantes.filter(
 					(participante) => participante.posicion === 1
@@ -77,7 +83,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 		}
 	}, [values]);
 
-	console.log(ganador);
+	// console.log(ganador);
 	return !values ? (
 		<Grid item></Grid>
 	) : (
@@ -172,86 +178,127 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 					</Button>
 				)}
 			</Grid>
-
-			<Grid item xs={12}>
-				<Typography sx={{ color: 'white' }} variant='h4'>
-					Participantes{' '}
-				</Typography>
+			<Grid item>
+				<Grid item sx={{ my: 5 }} xs={12}>
+					<Typography sx={{ color: 'white' }} variant='h4'>
+						Participantes{' '}
+					</Typography>
+				</Grid>
+				<Grid
+					sx={{ width: '80vw' }}
+					xs={12}
+					item
+					container
+					justifyContent='start'
+					direction='column'>
+					<TableContainer>
+						<Table size='small' sx={{ overflowX: 'hidden' }}>
+							<TableHead>
+								<TableRow>
+									<TableCell></TableCell>
+									<TableCell sx={{ color: 'white' }}>Nombre</TableCell>
+									<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+										Posicion
+									</TableCell>
+									<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+										Puntaje
+									</TableCell>
+									<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+										# Enfrentamientos
+									</TableCell>
+									<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+										Daño Total
+									</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{values?.torneo?.participantes &&
+									values.torneo.participantes.map((element, index) => {
+										return (
+											<TableRow key={index}>
+												<TableCell sx={{ color: 'white' }}>
+													<Avatar
+														src={element.image ? element.image : AvatarImg}
+													/>
+												</TableCell>
+												<TableCell>
+													<Typography
+														sx={{ color: 'white' }}
+														variant='body2'
+														component='span'>
+														{element.nombre}
+													</Typography>
+												</TableCell>
+												<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+													<Typography variant='body2' component='span'>
+														{element.posicion === -1
+															? 'Sin posicion'
+															: element.posicion}
+													</Typography>
+												</TableCell>
+												<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+													<Typography variant='body2' component='span'>
+														{element.puntaje_jugador}
+													</Typography>
+												</TableCell>
+												<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+													<Typography variant='body2' component='span'>
+														{element.no_enfrentamientos_jugados}
+													</Typography>
+												</TableCell>
+												<TableCell sx={{ textAlign: 'end', color: 'white' }}>
+													<Typography variant='body2' component='span'>
+														{element.total_damage}
+													</Typography>
+												</TableCell>
+											</TableRow>
+										);
+									})}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</Grid>
 			</Grid>
-			<Grid
-				sx={{ width: '80vw' }}
-				xs={12}
-				item
-				container
-				justifyContent='start'
-				direction='column'>
-				<TableContainer>
-					<Table sx={{ overflowX: 'hidden' }}>
-						<TableHead>
-							<TableRow>
-								<TableCell></TableCell>
-								<TableCell sx={{ color: 'white' }}>Nombre</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									Posicion
-								</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									Puntaje
-								</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									# Enfrentamientos
-								</TableCell>
-								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									Daño Total
-								</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{values?.torneo?.participantes &&
-								values.torneo.participantes.map((element, index) => {
-									return (
-										<TableRow key={index}>
-											<TableCell sx={{ color: 'white' }}>
-												<Avatar
-													src={element.image ? element.image : AvatarImg}
-												/>
-											</TableCell>
-											<TableCell>
-												<Typography
-													sx={{ color: 'white' }}
-													variant='body2'
-													component='span'>
-													{element.nombre}
-												</Typography>
-											</TableCell>
-											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-												<Typography variant='body2' component='span'>
-													{element.posicion === -1
-														? 'Sin posicion'
-														: element.posicion}
-												</Typography>
-											</TableCell>
-											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-												<Typography variant='body2' component='span'>
-													{element.puntaje_jugador}
-												</Typography>
-											</TableCell>
-											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-												<Typography variant='body2' component='span'>
-													{element.no_enfrentamientos_jugados}
-												</Typography>
-											</TableCell>
-											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-												<Typography variant='body2' component='span'>
-													{element.total_damage}
-												</Typography>
-											</TableCell>
-										</TableRow>
-									);
-								})}
-						</TableBody>
-					</Table>
-				</TableContainer>
-			</Grid>
+			{values?.torneo?.id_estado === 2 && (
+				<Grid item>
+					<Grid item sx={{ my: 5 }} xs={12}>
+						<Typography sx={{ color: 'white' }} variant='h4'>
+							Enfrentamientos{' '}
+						</Typography>
+					</Grid>
+					<Grid
+						sx={{ width: '80vw' }}
+						xs={12}
+						item
+						container
+						justifyContent='start'
+						direction='column'>
+						{enfrentamientos &&
+							enfrentamientos?.enfrentamientos?.map((enfrentamiento, i) => {
+								return (
+									<Grid
+										onClick={(e) =>
+											changeComponent(
+												<DashboardVerEnfrentamientoTFT
+													values={
+														enfrentamiento
+													}></DashboardVerEnfrentamientoTFT>
+											)
+										}
+										item
+										key={i}
+										sx={{ py: 2.5 }}>
+										<CardEnfrentamientoTFT
+											data={{
+												...enfrentamiento,
+												nombre: `Enfrentamiento ${i + 1}`,
+											}}></CardEnfrentamientoTFT>
+									</Grid>
+								);
+							})}
+					</Grid>
+				</Grid>
+			)}
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
 			</Grid>
