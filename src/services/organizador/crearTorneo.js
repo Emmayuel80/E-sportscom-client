@@ -20,6 +20,7 @@ export default function crearTorneo(
 		privado: datos.privado,
 		desc_premio: datos.descPremio,
 		description: datos.descTorneo,
+		hora_inicio: parseInt(datos.horaInicio)
 	};
 
 	console.log(body);

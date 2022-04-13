@@ -73,7 +73,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 			console.log(values);
 			if (values.torneo.id_estado === 2) {
 				getEnfrentamientosJugador(user.token, idTorneo, setEnfrentamientos);
-			} else if (values.torneo.id_estado === 4) {
+			} else if (values.torneo.id_estado === 3) {
 				console.log(`id_edo: ${values.torneo.id_estado}`);
 				const firstPos = values.participantes.filter(
 					(participante) => participante.posicion === 1
@@ -231,9 +231,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 												</TableCell>
 												<TableCell sx={{ textAlign: 'end', color: 'white' }}>
 													<Typography variant='body2' component='span'>
-														{element.posicion === -1
-															? 'Sin posicion'
-															: element.posicion}
+														{index + 1}
 													</Typography>
 												</TableCell>
 												<TableCell sx={{ textAlign: 'end', color: 'white' }}>
@@ -279,7 +277,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 									<Grid
 										onClick={(e) =>
 											changeComponent(
-												<DashboardVerEnfrentamientoTFT
+												<DashboardVerEnfrentamientoTFT												
 													values={
 														enfrentamiento
 													}></DashboardVerEnfrentamientoTFT>

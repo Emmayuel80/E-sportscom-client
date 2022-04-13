@@ -24,5 +24,6 @@ export default function (index, cantidad, user, setTorneos, search = null) {
 		})
 		.catch((error) => {
 			console.log(error);
+			setTorneos({});
 		});
 }

@@ -19,7 +19,16 @@ import JUEGOS from '../../constants/Juegos.json';
 import ResponseError from '../ResponseError';
 import crearTorneo from '../../services/organizador/crearTorneo';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+	menuPaper: {
+		maxHeight: 170,
+		overflowY: 'scroll',
+	},
+}));
 const DashboardOrganizadorCrearTorneo = () => {
+	const classes = useStyles();
 	// checar que id juego coincida con los equipos
 	const [fechaFinRegistro, setFechaFinRegistro] = React.useState(null);
 	const [fechaInicio, setFechaInicio] = React.useState(null);
@@ -33,6 +42,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 		privado: false,
 		descPremio: '',
 		descTorneo: '',
+		horaInicio: 17,
 	});
 	const [responseError, setResponseError] = React.useState(false);
 	const handleChange = (prop) => (event) => {
@@ -153,6 +163,28 @@ const DashboardOrganizadorCrearTorneo = () => {
 							</LocalizationProvider>
 						</FormControl>
 					</Grid>
+				</Grid>
+				<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
+					<FormControl fullWidth>
+						<InputLabel id='equipos-select'>Hora de inicio</InputLabel>
+						<Select
+							MenuProps={{ classes: { paper: classes.menuPaper } }}
+							required
+							labelId='hora-select'
+							value={values.horaInicio}
+							label='Hora de inicio'
+							onChange={handleChange('horaInicio')}>
+							{Array(24)
+								.fill(0)
+								.map((value, index) => {
+									return (
+										<MenuItem key={index} value={index}>
+											{index + ':00 horas'}
+										</MenuItem>
+									);
+								})}
+						</Select>
+					</FormControl>
 				</Grid>
 				<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
 					<FormControlLabel

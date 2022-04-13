@@ -67,7 +67,7 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 			console.log(values);
 			if (values.torneo.id_estado === 3) {
 				console.log(`id_edo: ${values.torneo.id_estado}`);
-				const firstPos = values.participantes.filter(
+				const firstPos = values.torneo.participantes.filter(
 					(participante) => participante.posicion === 1
 				);
 				setGanador(firstPos[0]);

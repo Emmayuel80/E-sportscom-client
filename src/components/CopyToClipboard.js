@@ -20,7 +20,7 @@ const CopyToClipboard = ({
 		setOpen(false);
 	};
 	return (
-		<Grid>
+		<Grid sx={{ display: 'inline' }}>
 			<Snackbar
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				open={open}
