@@ -139,7 +139,7 @@ const Login = () => {
 						fullWidth
 						variant='contained'
 						color='primary'>
-						Iniciar Sesion
+						Iniciar Sesión
 					</Button>
 				</Grid>
 				<Grid item sx={{ py: 1 }} xs={12} md={12} lg={12}>

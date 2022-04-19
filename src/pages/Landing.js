@@ -44,7 +44,7 @@ const Landing = () => {
 			</Grid>
 			<Grid item container justifyContent='center' xs={12} sx={{ p: 5 }}>
 				<Typography variant='h4'>
-					¡Hola Gamer! Bienvenido a la comunidad de E-sports de ESCOM.
+					¡Hola, Gamer! Bienvenido a la comunidad de E-sports de ESCOM.
 				</Typography>
 			</Grid>
 			<Grid
@@ -59,7 +59,7 @@ const Landing = () => {
 						variant='contained'
 						color='primary'
 						sx={buttonStyles}>
-						Iniciar Sesion
+						Iniciar Sesión
 					</Button>
 				</Grid>
 

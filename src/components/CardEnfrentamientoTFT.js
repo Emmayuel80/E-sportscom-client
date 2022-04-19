@@ -30,16 +30,21 @@ const CardEnfrentamientoTFT = ({ data }) => {
 					item
 					container
 					direction='row'>
-					<Grid item xs={6} sx={{ height: '70px' }}>
+					<Grid
+						item
+						container
+						alignItems='center'
+						xs={6}
+						sx={{ height: '70px' }}>
 						<Typography
-							sx={{ overflowWrap: 'break-word', inlineSize: '200px' }}
+							sx={{ overflowWrap: 'break-word', inlineSize: '250px' }}
 							variant='h5'>
 							{data.nombre}
 						</Typography>
 					</Grid>
-					<Grid container justifyContent='end' item xs={6}>
+					<Grid container alignItems='center' justifyContent='end' item xs={6}>
 						<Typography
-							sx={{ overflowWrap: 'break-word', inlineSize: '200px' }}
+							sx={{ overflowWrap: 'break-word', inlineSize: '350px' }}
 							variant='h5'>
 							fecha creado: {new Date(data.fecha_creado).toLocaleString()}
 						</Typography>

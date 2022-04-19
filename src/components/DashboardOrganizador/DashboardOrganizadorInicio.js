@@ -193,7 +193,7 @@ const DashboardOrganizadorInicio = () => {
 							variant='h4'
 							align='center'
 							sx={{ textAlign: 'left', p: 4, ...textStyle }}>
-							Actividad reciente
+							Actividades recientes
 						</Typography>
 					</Grid>
 					{data && data.latestActivity ? (
@@ -257,7 +257,7 @@ const DashboardOrganizadorInicio = () => {
 					}}>
 					<Grid item>
 						<Typography sx={textStyle} variant='h4'>
-							Grafica de torneos
+							Gráfica de torneos
 						</Typography>
 					</Grid>
 					<Grid

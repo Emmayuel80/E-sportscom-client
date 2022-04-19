@@ -51,7 +51,7 @@ const OpcionesOrganizador = () => {
 				Historial de torneos
 			</Button>
 			<Button sx={buttonExtraStyles} variant='text' color='secondary'>
-				Ver bitacora torneos
+				Ver bitácora torneos
 			</Button>
 		</Grid>
 	);

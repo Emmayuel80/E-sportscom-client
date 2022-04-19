@@ -98,7 +98,7 @@ const DashboardVerEnfrentamiento = ({ values }) => {
 								<TableCell></TableCell>
 								<TableCell sx={{ color: 'white' }}>Nombre</TableCell>
 								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
-									Posicion
+									Posición
 								</TableCell>
 								<TableCell sx={{ textAlign: 'end', color: 'white' }}>
 									Puntaje
@@ -132,7 +132,7 @@ const DashboardVerEnfrentamiento = ({ values }) => {
 											<TableCell sx={{ textAlign: 'end', color: 'white' }}>
 												<Typography variant='body2' component='span'>
 													{element.posicion === -1
-														? 'Sin posicion'
+														? 'Sin posición'
 														: element.posicion}
 												</Typography>
 											</TableCell>

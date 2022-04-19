@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import getDataTorneo from '../../services/jugador/getDataTorneo.js';
 import DashboardJugadorContext from '../../context/DashboardJugadorContext';
 import ResponseError from '../ResponseError';
-import JUEGOS from '../../constants/Juegos.json';
+// import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
 import AvatarImg from '../../pngegg.png';
 import unirseTorneoTFT from '../../services/jugador/unirseTorneoTFT.js';
@@ -30,6 +30,8 @@ import DashboardVerMisTorneosInscritos from './DashboardVerMisTorneosInscritos';
 import CardEnfrentamientoTFT from '../CardEnfrentamientoTFT.js';
 import getEnfrentamientosJugador from '../../services/jugador/getEnfrentamientosJugador.js';
 import DashboardVerEnfrentamientoTFT from './DashboardVerEnfrentamientoTFT.js';
+// import MaterialIcon from 'material-icons-react';
+// import ESTADOS from '../../constants/Estados.json';
 const DashboardVerTorneo = ({ idTorneo }) => {
 	// Context
 	const { user, changeComponent } = React.useContext(DashboardJugadorContext);
@@ -99,11 +101,11 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 						{values.torneo.nombre}
 					</Typography>
 				</Grid>
-				<Grid xs={12} sx={{ py: 2, px: 1, fontWeight: 'bold' }} item>
+				{/* <Grid xs={12} sx={{ py: 2, px: 1, fontWeight: 'bold' }} item>
 					<Typography sx={{ color: 'white' }} variant='h5'>
 						{JUEGOS[values.torneo.id_juego]}
 					</Typography>
-				</Grid>
+				</Grid> */}
 				<Grid
 					item
 					container
@@ -277,7 +279,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 									<Grid
 										onClick={(e) =>
 											changeComponent(
-												<DashboardVerEnfrentamientoTFT												
+												<DashboardVerEnfrentamientoTFT
 													values={
 														enfrentamiento
 													}></DashboardVerEnfrentamientoTFT>
@@ -289,7 +291,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 										<CardEnfrentamientoTFT
 											data={{
 												...enfrentamiento,
-												nombre: `Enfrentamiento ${i + 1}`,
+												nombre: `ID Enfrentamiento: ${enfrentamiento.idenfrentamiento_TFT}`,
 											}}></CardEnfrentamientoTFT>
 									</Grid>
 								);

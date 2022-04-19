@@ -45,7 +45,7 @@ const OpcionesJugador = () => {
 			</Button>
 			<Button sx={buttonExtraStyles}
 			 variant='text' color='secondary'>
-				Ver bitacora
+				Ver bitácora
 			</Button>
 		</Grid>
 	);
