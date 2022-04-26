@@ -43,10 +43,6 @@ const OpcionesJugador = () => {
 				color='secondary'>
 				Mis equipos
 			</Button>
-			<Button sx={buttonExtraStyles}
-			 variant='text' color='secondary'>
-				Ver bitácora
-			</Button>
 		</Grid>
 	);
 };

@@ -15,6 +15,7 @@ import DashboardOrganizadorContext from '../../context/DashboardOrganizadorConte
 import ResponseError from '../ResponseError';
 import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
+import ETAPAS from '../../constants/Etapas.json';
 import MaterialIcon from 'material-icons-react';
 import expulsarJugador from '../../services/organizador/expulsarJugador';
 const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
@@ -29,6 +30,7 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 	const [logos, setLogos] = React.useState([]);
 	const [verEquipo, setVerEquipo] = React.useState([]);
 	const [idEquipos, setIdEquipos] = React.useState([]);
+	const [etapas, setEtapas] = React.useState({});
 
 	// Handlers
 	const handleExpandEquipo = (index) => {
@@ -71,6 +73,18 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 			setEquiposInscritos(equipos);
 			setVerEquipo(verEquipoAux);
 			setLogos(logos);
+
+			const partidas = values.partidas;
+			const etapasAux = {};
+			partidas.forEach((partida) => {
+				if (etapasAux[partida.etapa]) {
+					etapasAux[partida.etapa].push(partida);
+				} else {
+					etapasAux[partida.etapa] = [partida];
+				}
+			});
+			console.log(etapasAux);
+			setEtapas(etapasAux);
 		}
 	}, [values]);
 
@@ -150,6 +164,131 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 					</Grid>
 				</Grid>
 			</Grid>
+			<Grid item xs={12}>
+				<Typography sx={{ color: 'white' }} variant='h4'>
+					Partidas en curso
+				</Typography>
+			</Grid>
+			{etapas &&
+				Object.values(etapas).map((etapa, index) => {
+					return (
+						<Grid key={JSON.stringify(etapa) + index} item xs={12}>
+							<Grid item xs={12}>
+								<Typography sx={{ color: 'white' }} variant='h4'>
+									Etapa: {ETAPAS[etapa[0].etapa]}
+								</Typography>
+							</Grid>
+							<Divider sx={{ backgroundColor: 'white' }} />
+							{etapa &&
+								etapa.map((partida) => {
+									return (
+										<Grid key={JSON.stringify(partida)}>
+											<Grid item xs={12}>
+												<Typography sx={{ color: 'white' }} variant='h6'>
+													{!partida?.id_ganador
+														? 'Fecha a jugar'
+														: 'Fecha jugada'}
+													: {new Date(partida?.fecha_jugada).toLocaleString()}
+												</Typography>
+											</Grid>
+											<Grid item xs={12}>
+												{partida.equipo1 && (
+													<Grid container>
+														<Grid
+															sx={{
+																backgroundColor: COLORS.secondary.main,
+																borderRadius: '1rem',
+																width: '100%',
+																my: 3,
+															}}>
+															<Grid
+																sx={{ py: 1.5, px: 1.5 }}
+																justifyContent='space-between'
+																alignItems='center'
+																item
+																container
+																direction='row'>
+																<Grid item xs={6} sx={{ height: '70px' }}>
+																	<Typography
+																		sx={{
+																			overflowWrap: 'break-word',
+																			inlineSize: '200px',
+																		}}
+																		variant='h5'>
+																		{partida.equipo1}
+																	</Typography>
+																</Grid>
+																<Grid
+																	container
+																	justifyContent='end'
+																	item
+																	xs={6}>
+																	<Avatar
+																		sx={{ width: 64, height: 64 }}
+																		src={partida.logo1}
+																		variant='rounded'
+																		aria-label='recipe'></Avatar>
+																</Grid>
+															</Grid>
+														</Grid>
+														<Grid item xs={12} sx={{ mb: 3 }}>
+															<Typography
+																sx={{ color: 'white', textAlign: 'center' }}
+																variant='h4'>
+																VS
+															</Typography>
+														</Grid>
+														<Grid
+															sx={{
+																backgroundColor: COLORS.secondary.main,
+																borderRadius: '1rem',
+																width: '100%',
+																mb: 5,
+															}}>
+															<Grid
+																sx={{ py: 1.5, px: 1.5 }}
+																justifyContent='space-between'
+																alignItems='center'
+																item
+																container
+																direction='row'>
+																<Grid item xs={6} sx={{ height: '70px' }}>
+																	<Typography
+																		sx={{
+																			overflowWrap: 'break-word',
+																			inlineSize: '200px',
+																		}}
+																		variant='h5'>
+																		{partida.equipo2}
+																	</Typography>
+																</Grid>
+																<Grid
+																	container
+																	justifyContent='end'
+																	item
+																	xs={6}>
+																	<Avatar
+																		sx={{ width: 64, height: 64 }}
+																		src={partida.equipo2.logo2}
+																		variant='rounded'
+																		aria-label='recipe'></Avatar>
+																</Grid>
+															</Grid>
+														</Grid>
+													</Grid>
+												)}
+											</Grid>
+										</Grid>
+									);
+								})}
+						</Grid>
+					);
+				})}
+			<Grid item container alignItems='center' xs={12} sx={{ mb: 0, pb: 0 }}>
+				<Typography sx={{ color: 'white' }} variant='h4'>
+					Participantes{' '}
+				</Typography>
+			</Grid>
 			{ganador && (
 				<Grid item container justifyContent='center' direction='row'>
 					<Typography sx={{ color: 'white' }} variant='h5'>
@@ -179,7 +318,7 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 										direction='row'>
 										<Grid
 											item
-											xs={11}
+											xs={values.torneo.id_estado === 0 ? 11 : 12}
 											sx={{
 												backgroundColor: COLORS.secondary.main,
 												borderRadius: '1rem',
@@ -212,34 +351,36 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 												</Grid>
 											</Grid>
 										</Grid>
-										<Grid
-											container
-											justifyContent='center'
-											alignItems='center'
-											item
-											xs={1}>
-											<IconButton
-												disabled={disableAll}
-												size={'large'}
-												onClick={(e) =>
-													expulsarJugador(
-														user.token,
-														idEquipos[index],
-														idTorneo,
-														setResponseError,
-														values,
-														setValues,
-														setDisableAll,
-														true
-													)
-												}>
-												<MaterialIcon
-													size={50}
-													icon='group_remove'></MaterialIcon>
-											</IconButton>
-										</Grid>
+										{values.torneo.id_estado === 0 && (
+											<Grid
+												container
+												justifyContent='center'
+												alignItems='center'
+												item
+												xs={1}>
+												<IconButton
+													disabled={disableAll}
+													size={'large'}
+													onClick={(e) =>
+														expulsarJugador(
+															user.token,
+															idEquipos[index],
+															idTorneo,
+															setResponseError,
+															values,
+															setValues,
+															setDisableAll,
+															true
+														)
+													}>
+													<MaterialIcon
+														size={50}
+														icon='group_remove'></MaterialIcon>
+												</IconButton>
+											</Grid>
+										)}
 									</Grid>
-									<Grid item xs={11}>
+									<Grid item xs={values.torneo.id_estado === 0 ? 11 : 12}>
 										<Collapse
 											in={verEquipo[index]}
 											timeout='auto'

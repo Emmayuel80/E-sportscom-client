@@ -23,6 +23,7 @@ import ResponseError from '../ResponseError';
 import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
 import JoinLOLTournamentDialog from '../JoinLOLTournamentDialog.js';
+import getPartidaLoL from '../../services/jugador/getPartidaLoL.js';
 
 const DashboardVerTorneoLOL = ({ idTorneo }) => {
 	// Context
@@ -34,6 +35,7 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 	const [equiposInscritos, setEquiposInscritos] = React.useState({});
 	const [logos, setLogos] = React.useState([]);
 	const [verEquipo, setVerEquipo] = React.useState([]);
+	const [dataPartida, setDataPartida] = React.useState(null);
 
 	const [open, setOpen] = React.useState(false);
 
@@ -78,10 +80,10 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 			const logos = [];
 			const verEquipoAux = [];
 			participantes.forEach((participante) => {
-				if (equipos[participante.equipo]) {
-					equipos[participante.equipo].push(participante);
+				if (equipos[participante.id_equipo]) {
+					equipos[participante.id_equipo].push(participante);
 				} else {
-					equipos[participante.equipo] = [participante];
+					equipos[participante.id_equipo] = [participante];
 					logos.push(participante.logo);
 					verEquipoAux.push(false);
 				}
@@ -89,6 +91,8 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 			setEquiposInscritos(equipos);
 			setVerEquipo(verEquipoAux);
 			setLogos(logos);
+
+			getPartidaLoL(user.token, idTorneo, setResponseError, setDataPartida);
 		}
 	}, [values]);
 
@@ -187,7 +191,100 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 					</Button>
 				)}
 			</Grid>
-
+			{values.torneo.id_estado === 2 && (
+				<Grid item xs={12}>
+					<Grid item xs={12}>
+						<Typography sx={{ color: 'white' }} variant='h4'>
+							Partida en curso
+						</Typography>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography sx={{ color: 'white' }} variant='h5'>
+							Fecha a jugar:{' '}
+							{new Date(dataPartida?.partida?.fecha_jugada).toLocaleString()}
+						</Typography>
+					</Grid>
+					<Grid item xs={12}>
+						{dataPartida?.partida && (
+							<Grid container>
+								<Grid
+									sx={{
+										backgroundColor: COLORS.secondary.main,
+										borderRadius: '1rem',
+										width: '100%',
+										my: 3,
+									}}>
+									<Grid
+										sx={{ py: 1.5, px: 1.5 }}
+										justifyContent='space-between'
+										alignItems='center'
+										item
+										container
+										direction='row'>
+										<Grid item xs={6} sx={{ height: '70px' }}>
+											<Typography
+												sx={{
+													overflowWrap: 'break-word',
+													inlineSize: '200px',
+												}}
+												variant='h5'>
+												{dataPartida?.partida.equipos[0]?.nombre}
+											</Typography>
+										</Grid>
+										<Grid container justifyContent='end' item xs={6}>
+											<Avatar
+												sx={{ width: 64, height: 64 }}
+												src={dataPartida?.partida.equipos[0]?.logo}
+												variant='rounded'
+												aria-label='recipe'></Avatar>
+										</Grid>
+									</Grid>
+								</Grid>
+								<Grid item xs={12} sx={{ mb: 3 }}>
+									<Typography
+										sx={{ color: 'white', textAlign: 'center' }}
+										variant='h4'>
+										VS
+									</Typography>
+								</Grid>
+								<Grid
+									sx={{
+										backgroundColor: COLORS.secondary.main,
+										borderRadius: '1rem',
+										width: '100%',
+										mb: 5,
+									}}>
+									<Grid
+										sx={{ py: 1.5, px: 1.5 }}
+										justifyContent='space-between'
+										alignItems='center'
+										item
+										container
+										direction='row'>
+										<Grid item xs={6} sx={{ height: '70px' }}>
+											<Typography
+												sx={{
+													overflowWrap: 'break-word',
+													inlineSize: '200px',
+												}}
+												variant='h5'>
+												{dataPartida?.partida.equipos[1]?.nombre}
+											</Typography>
+										</Grid>
+										<Grid container justifyContent='end' item xs={6}>
+											<Avatar
+												sx={{ width: 64, height: 64 }}
+												src={dataPartida?.partida.equipos[1]?.logo}
+												variant='rounded'
+												aria-label='recipe'></Avatar>
+										</Grid>
+									</Grid>
+								</Grid>
+							</Grid>
+						)}
+					</Grid>
+				</Grid>
+			)}
 			<Grid item xs={12}>
 				<Typography sx={{ color: 'white' }} variant='h4'>
 					Participantes{' '}
@@ -226,7 +323,7 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 											<Typography
 												sx={{ overflowWrap: 'break-word', inlineSize: '200px' }}
 												variant='h5'>
-												{equipo}
+												{equiposInscritos[equipo][0].equipo}
 											</Typography>
 										</Grid>
 										<Grid container justifyContent='end' item xs={6}>

@@ -50,9 +50,6 @@ const OpcionesOrganizador = () => {
 				color='secondary'>
 				Historial de torneos
 			</Button>
-			<Button sx={buttonExtraStyles} variant='text' color='secondary'>
-				Ver bitácora torneos
-			</Button>
 		</Grid>
 	);
 };

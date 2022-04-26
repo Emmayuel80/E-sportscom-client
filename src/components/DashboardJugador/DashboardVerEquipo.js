@@ -147,12 +147,22 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 												/>
 											</TableCell>
 											<TableCell>
-												<Typography
-													sx={{ color: 'white' }}
-													variant='body2'
-													component='span'>
-													{element.nombre}
-												</Typography>
+												<Grid
+													container
+													justifyContent='start'
+													alignItems='center'
+													item
+													xs={12}>
+													<Typography
+														sx={{ color: 'white', pr: 5 }}
+														variant='body2'
+														component='span'>
+														{element.nombre}
+													</Typography>
+													{element.capitan === 1 && (
+														<MaterialIcon icon='star'></MaterialIcon>
+													)}
+												</Grid>
 											</TableCell>
 											<TableCell>
 												<Typography
