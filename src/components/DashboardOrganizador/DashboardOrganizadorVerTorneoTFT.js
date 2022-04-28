@@ -8,6 +8,7 @@ import {
 	TableCell,
 	TableContainer,
 	TableHead,
+	Button,
 	TableRow,
 	Tooltip,
 	Typography,
@@ -22,6 +23,9 @@ import COLORS from '../../constants/Colors.json';
 import AvatarImg from '../../pngegg.png';
 import MaterialIcon from 'material-icons-react';
 import expulsarJugador from '../../services/organizador/expulsarJugador';
+import DialogBitacora from '../DialogBitacora';
+import getBitacoraTorneo from '../../services/organizador/getBitacoraTorneo';
+import CardEnfrentamientoTFT from '../CardEnfrentamientoTFT';
 const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 	// Context
 	const { user } = React.useContext(DashboardOrganizadorContext);
@@ -30,7 +34,17 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 	const [responseError, setResponseError] = React.useState(false);
 	const [ganador, setGanador] = React.useState(null);
 	const [disableAll, setDisableAll] = React.useState(false);
+	const [openDialogBitacora, setOpenDialogBitacora] = React.useState(false);
+	const [bitacora, setBitacora] = React.useState([]);
+	const [enfrentamientos, setEnfrentamientos] = React.useState(null);
 	// Handlers
+	const handleBitacoraEquipo = () => {
+		getBitacoraTorneo(user, idTorneo, setBitacora, setResponseError).then(
+			() => {
+				setOpenDialogBitacora(true);
+			}
+		);
+	};
 	// UseEffect
 	React.useEffect(() => {
 		getDataTorneo(user.token, idTorneo, setResponseError, setValues);
@@ -46,6 +60,7 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 				);
 				setGanador(firstPos[0]);
 			}
+			setEnfrentamientos(values.partidas);
 		}
 	}, [values]);
 
@@ -132,6 +147,16 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 					</Typography>
 				</Grid>
 			)}
+			<Grid item container justifyContent='start'>
+				<Grid item xs={12}>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={handleBitacoraEquipo}>
+						Ver bitacora de torneo.
+					</Button>
+				</Grid>
+			</Grid>
 			<Grid
 				sx={{ width: '80vw' }}
 				xs={12}
@@ -139,7 +164,7 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 				container
 				justifyContent='center'
 				direction='column'>
-				<Typography sx={{ color: 'white' }} variant='h4'>
+				<Typography sx={{ color: 'white', mt: 5 }} variant='h4'>
 					Participantes{' '}
 				</Typography>
 				<TableContainer>
@@ -230,7 +255,7 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 																setResponseError,
 																values,
 																setValues,
-																setDisableAll,																
+																setDisableAll
 															)
 														}>
 														<MaterialIcon icon='person_off'></MaterialIcon>
@@ -245,8 +270,47 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 					</Table>
 				</TableContainer>
 			</Grid>
+			{values?.torneo?.id_estado === 2 && (
+				<Grid container item>
+					<Grid item sx={{ my: 5 }} xs={12}>
+						<Typography sx={{ color: 'white' }} variant='h4'>
+							Enfrentamientos{' '}
+						</Typography>
+					</Grid>
+					<Grid
+						sx={{ width: '80vw' }}
+						xs={12}
+						item
+						container
+						justifyContent='start'
+						direction='column'>
+						{enfrentamientos &&
+							enfrentamientos?.map((enfrentamiento, i) => {
+								return (
+									<Grid
+										onClick={(e) => alert('dialog')}
+										item
+										key={i}
+										sx={{ py: 2.5 }}>
+										<CardEnfrentamientoTFT
+											data={{
+												...enfrentamiento,
+												nombre: `ID Enfrentamiento: ${enfrentamiento.idenfrentamiento_TFT}`,
+											}}
+											textFecha={'Fecha jugada:'}
+											propertieFecha={'fecha_jugada'}></CardEnfrentamientoTFT>
+									</Grid>
+								);
+							})}
+					</Grid>
+				</Grid>
+			)}
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
+				<DialogBitacora
+					open={openDialogBitacora}
+					setOpen={setOpenDialogBitacora}
+					bitacoraArray={bitacora}></DialogBitacora>
 			</Grid>
 		</Grid>
 	);

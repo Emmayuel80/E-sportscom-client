@@ -1,6 +1,12 @@
 import {
 	Avatar,
+	Button,
 	Collapse,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	Divider,
 	Grid,
 	IconButton,
@@ -18,6 +24,10 @@ import COLORS from '../../constants/Colors.json';
 import ETAPAS from '../../constants/Etapas.json';
 import MaterialIcon from 'material-icons-react';
 import expulsarJugador from '../../services/organizador/expulsarJugador';
+import registrarResultadoLoL from '../../services/organizador/registrarResultadoLoL';
+import DialogBitacora from '../DialogBitacora';
+import getBitacoraTorneo from '../../services/organizador/getBitacoraTorneo';
+/* eslint-disable complexity */
 const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 	// Context
 	const { user } = React.useContext(DashboardOrganizadorContext);
@@ -31,6 +41,13 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 	const [verEquipo, setVerEquipo] = React.useState([]);
 	const [idEquipos, setIdEquipos] = React.useState([]);
 	const [etapas, setEtapas] = React.useState({});
+	const [open, setOpen] = React.useState(false);
+	const [partidaSeleccionada, setPartidaSeleccionada] = React.useState({});
+	const [reload, setReload] = React.useState(0);
+	const [equipoSeleccionado, setEquipoSeleccionado] = React.useState(-1);
+	const [confirmDialog, setConfirmDialog] = React.useState(false);
+	const [openDialogBitacora, setOpenDialogBitacora] = React.useState(false);
+	const [bitacora, setBitacora] = React.useState([]);
 
 	// Handlers
 	const handleExpandEquipo = (index) => {
@@ -38,10 +55,47 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 		newVerEquipo[index] = !newVerEquipo[index];
 		setVerEquipo(newVerEquipo);
 	};
+	const handleBitacoraEquipo = () => {
+		getBitacoraTorneo(user, idTorneo, setBitacora, setResponseError).then(
+			() => {
+				setOpenDialogBitacora(true);
+			}
+		);
+	};
+	const handleRegistrarResultadoLOL = () => {
+		let idEquipo;
+		if (equipoSeleccionado !== -1 && equipoSeleccionado === 1) {
+			idEquipo = partidaSeleccionada.id_equipo1;
+		}
+		if (equipoSeleccionado !== -1 && equipoSeleccionado === 2) {
+			idEquipo = partidaSeleccionada.id_equipo1;
+		}
+		registrarResultadoLoL(
+			user.token,
+			idEquipo,
+			partidaSeleccionada.id_partida,
+			setResponseError,
+			setReload,
+			reload,
+			setConfirmDialog,
+			setOpen
+		);
+	};
+
+	const handlePartidaSeleccionada = (idGanador, partida) => {
+		if (!idGanador) {
+			setPartidaSeleccionada(partida);
+			setOpen(true);
+		}
+	};
 	// UseEffect
 	React.useEffect(() => {
 		getDataTorneo(user.token, idTorneo, setResponseError, setValues);
 	}, []);
+
+	React.useEffect(() => {
+		getDataTorneo(user.token, idTorneo, setResponseError, setValues);
+	}, [reload]);
 
 	React.useEffect(() => {
 		if (values) {
@@ -164,6 +218,16 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 					</Grid>
 				</Grid>
 			</Grid>
+			<Grid item sx={{ mb: 3 }} container justifyContent='start'>
+				<Grid item xs={12}>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={handleBitacoraEquipo}>
+						Ver bitacora de torneo.
+					</Button>
+				</Grid>
+			</Grid>
 			<Grid item xs={12}>
 				<Typography sx={{ color: 'white' }} variant='h4'>
 					Partidas en curso
@@ -182,7 +246,21 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 							{etapa &&
 								etapa.map((partida) => {
 									return (
-										<Grid key={JSON.stringify(partida)}>
+										<Grid
+											sx={{
+												backgroundColor: partida?.id_ganador
+													? '#287A79'
+													: '#7A2828',
+												borderRadius: 5,
+												mb: 5,
+												mt: 3,
+												p: 3,
+												cursor: !partida?.id_ganador ? 'pointer' : '',
+											}}
+											onClick={(e) =>
+												handlePartidaSeleccionada(partida?.id_ganador, partida)
+											}
+											key={JSON.stringify(partida)}>
 											<Grid item xs={12}>
 												<Typography sx={{ color: 'white' }} variant='h6'>
 													{!partida?.id_ganador
@@ -190,6 +268,32 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 														: 'Fecha jugada'}
 													: {new Date(partida?.fecha_jugada).toLocaleString()}
 												</Typography>
+												<Grid item container justifyContent='start'>
+													<Typography
+														sx={{ color: 'white', pr: 1 }}
+														variant='h6'>
+														Estado:
+													</Typography>
+													<Typography
+														sx={{ color: 'white', fontWeight: 'bold' }}
+														variant='h6'>
+														{!partida?.id_ganador
+															? ` Pendiente de registrar resultados`
+															: ` Resultados registrados`}
+													</Typography>
+												</Grid>
+												<Grid item container justifyContent='start'>
+													<Typography
+														sx={{ color: 'white', pr: 1 }}
+														variant='h6'>
+														Ganador:
+													</Typography>
+													<Typography
+														sx={{ color: 'white', fontWeight: 'bold' }}
+														variant='h6'>
+														{partida?.id_ganador ? partida?.nombre_ganador : ''}
+													</Typography>
+												</Grid>
 											</Grid>
 											<Grid item xs={12}>
 												{partida.equipo1 && (
@@ -200,6 +304,11 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 																borderRadius: '1rem',
 																width: '100%',
 																my: 3,
+																opacity:
+																	partida?.id_ganador &&
+																	partida.id_equipo1 === partida?.id_ganador
+																		? 1
+																		: 0.5,
 															}}>
 															<Grid
 																sx={{ py: 1.5, px: 1.5 }}
@@ -244,6 +353,11 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 																borderRadius: '1rem',
 																width: '100%',
 																mb: 5,
+																opacity:
+																	partida?.id_ganador &&
+																	partida.id_equipo2 === partida.id_ganador
+																		? 1
+																		: 0.5,
 															}}>
 															<Grid
 																sx={{ py: 1.5, px: 1.5 }}
@@ -311,7 +425,10 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 						Object.keys(equiposInscritos).map((equipo, index) => {
 							console.log(equipo);
 							return (
-								<Grid key={JSON.stringify(equipo) + index} item sx={{ pb: 5 }}>
+								<Grid
+									key={JSON.stringify(equipo) + index}
+									item
+									sx={{ pb: 5, cursor: 'pointer' }}>
 									<Grid
 										container
 										justifyContent='space-between'
@@ -431,7 +548,173 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
 			</Grid>
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
+				<DialogBitacora
+					open={openDialogBitacora}
+					setOpen={setOpenDialogBitacora}
+					bitacoraArray={bitacora}></DialogBitacora>
 			</Grid>
+			<Dialog
+				maxWidth={'lg'}
+				open={open}
+				onClose={(e) => setOpen(false)}
+				aria-labelledby='alert-dialog-title'
+				aria-describedby='alert-dialog-description'>
+				<DialogTitle
+					sx={{ color: 'white', fontWeight: 'bold' }}
+					id='alert-dialog-title'>
+					{'Selecciona el equipo ganador'}
+				</DialogTitle>
+				<DialogContent>
+					<Grid
+						container
+						item
+						xs={12}
+						justifyContent='space-around'
+						direction='row'>
+						<Grid
+							item
+							xs={12}
+							lg={5}
+							onClick={(e) => setEquipoSeleccionado(1)}
+							sx={{
+								backgroundColor: COLORS.secondary.main,
+								borderRadius: '1rem',
+								width: '100%',
+								my: 3,
+								cursor: 'pointer',
+								opacity: equipoSeleccionado === 1 ? 1 : 0.5,
+							}}>
+							<Grid
+								sx={{ py: 10, px: 5 }}
+								justifyContent='space-between'
+								alignItems='center'
+								item
+								container
+								direction='row'>
+								<Grid
+									sx={{ mb: 5 }}
+									container
+									justifyContent='center'
+									item
+									xs={12}>
+									<Avatar
+										sx={{ width: 96, height: 96 }}
+										src={partidaSeleccionada.logo1}
+										variant='rounded'
+										aria-label='recipe'></Avatar>
+								</Grid>
+								<Grid
+									item
+									container
+									justifyContent='center'
+									xs={12}
+									sx={{ height: '70px' }}>
+									<Typography
+										sx={{
+											overflowWrap: 'break-word',
+											inlineSize: '200px',
+										}}
+										variant='h5'>
+										{partidaSeleccionada.equipo1}
+									</Typography>
+								</Grid>
+							</Grid>
+						</Grid>
+						<Grid
+							xs={12}
+							lg={5}
+							onClick={(e) => setEquipoSeleccionado(2)}
+							sx={{
+								backgroundColor: COLORS.secondary.main,
+								borderRadius: '1rem',
+								width: '100%',
+								my: 3,
+								cursor: 'pointer',
+								opacity: equipoSeleccionado === 2 ? 1 : 0.5,
+							}}>
+							<Grid
+								sx={{ py: 10, px: 5 }}
+								justifyContent='space-between'
+								alignItems='center'
+								item
+								container
+								direction='row'>
+								<Grid
+									sx={{ mb: 5 }}
+									container
+									justifyContent='center'
+									item
+									xs={12}>
+									<Avatar
+										sx={{ width: 96, height: 96 }}
+										src={partidaSeleccionada.logo2}
+										variant='rounded'
+										aria-label='recipe'></Avatar>
+								</Grid>
+								<Grid
+									item
+									container
+									justifyContent='center'
+									xs={12}
+									sx={{ height: '70px' }}>
+									<Typography
+										sx={{
+											overflowWrap: 'break-word',
+											inlineSize: '200px',
+										}}
+										variant='h5'>
+										{partidaSeleccionada.equipo2}
+									</Typography>
+								</Grid>
+							</Grid>
+						</Grid>
+					</Grid>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={(e) => setConfirmDialog(true)}
+						autoFocus>
+						Confirmar
+					</Button>
+				</DialogActions>
+			</Dialog>
+			<Dialog
+				open={confirmDialog}
+				onClose={(e) => setConfirmDialog(false)}
+				aria-labelledby='alert-dialog-title'
+				aria-describedby='alert-dialog-description'>
+				<DialogTitle sx={{ color: 'white' }} id='alert-dialog-title'>
+					{'¿Estas seguro?'}
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText
+						id='alert-dialog-description'
+						sx={{ color: 'white' }}>
+						Seleccionaras al equipo{' '}
+						{equipoSeleccionado === 1 && equipoSeleccionado !== -1
+							? partidaSeleccionada.equipo1
+							: partidaSeleccionada.equipo2}{' '}
+						como ganador
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={(e) => setConfirmDialog(false)}>
+						Cancelar
+					</Button>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={(e) => handleRegistrarResultadoLOL()}
+						autoFocus>
+						Aceptar
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Grid>
 	);
 };
