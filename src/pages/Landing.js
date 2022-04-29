@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@mui/material';
+import InstallPWA from '../hooks/installPWA';
 
 const buttonStyles = {
 	px: 3,
@@ -8,6 +9,7 @@ const buttonStyles = {
 	width: '100%',
 };
 const Landing = () => {
+	const ButtonPWA = InstallPWA();
 	React.useEffect(() => {
 		const sesion = JSON.parse(localStorage.getItem('data'));
 		if (sesion) {
@@ -73,6 +75,7 @@ const Landing = () => {
 					</Button>
 				</Grid>
 			</Grid>
+			<Grid>{ButtonPWA}</Grid>
 		</Grid>
 	);
 };

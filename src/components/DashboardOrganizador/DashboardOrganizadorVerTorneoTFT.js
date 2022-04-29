@@ -24,6 +24,7 @@ import AvatarImg from '../../pngegg.png';
 import MaterialIcon from 'material-icons-react';
 import expulsarJugador from '../../services/organizador/expulsarJugador';
 import DialogBitacora from '../DialogBitacora';
+import DialogEnfrentamientoTFT from '../DialogEnfrentamientoTFT';
 import getBitacoraTorneo from '../../services/organizador/getBitacoraTorneo';
 import CardEnfrentamientoTFT from '../CardEnfrentamientoTFT';
 const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
@@ -35,7 +36,11 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 	const [ganador, setGanador] = React.useState(null);
 	const [disableAll, setDisableAll] = React.useState(false);
 	const [openDialogBitacora, setOpenDialogBitacora] = React.useState(false);
+	const [openDialogEnfrentamientoTFT, setOpenDialogEnfrentamientoTFT] =
+		React.useState(false);
 	const [bitacora, setBitacora] = React.useState([]);
+	const [enfrentamientoSeleccionado, setEnfrentamientoSeleccionado] =
+		React.useState({});
 	const [enfrentamientos, setEnfrentamientos] = React.useState(null);
 	// Handlers
 	const handleBitacoraEquipo = () => {
@@ -45,6 +50,11 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 			}
 		);
 	};
+	const handleEnfrentamientoSeleccionado = (enfrentamiento) => {
+		setOpenDialogEnfrentamientoTFT(true);
+		setEnfrentamientoSeleccionado(enfrentamiento);
+	};
+
 	// UseEffect
 	React.useEffect(() => {
 		getDataTorneo(user.token, idTorneo, setResponseError, setValues);
@@ -288,7 +298,9 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 							enfrentamientos?.map((enfrentamiento, i) => {
 								return (
 									<Grid
-										onClick={(e) => alert('dialog')}
+										onClick={(e) =>
+											handleEnfrentamientoSeleccionado(enfrentamiento)
+										}
 										item
 										key={i}
 										sx={{ py: 2.5 }}>
@@ -307,11 +319,16 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
 			)}
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
-				<DialogBitacora
-					open={openDialogBitacora}
-					setOpen={setOpenDialogBitacora}
-					bitacoraArray={bitacora}></DialogBitacora>
 			</Grid>
+			<DialogBitacora
+				open={openDialogBitacora}
+				setOpen={setOpenDialogBitacora}
+				bitacoraArray={bitacora}></DialogBitacora>
+			<DialogEnfrentamientoTFT
+				setOpen={setOpenDialogEnfrentamientoTFT}
+				open={openDialogEnfrentamientoTFT}
+				enfrentamiento={enfrentamientoSeleccionado}
+				puuids={values.puuids}></DialogEnfrentamientoTFT>
 		</Grid>
 	);
 };
