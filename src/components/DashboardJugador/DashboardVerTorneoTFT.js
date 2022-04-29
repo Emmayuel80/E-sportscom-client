@@ -53,15 +53,13 @@ const DashboardVerTorneo = ({ idTorneo }) => {
 	};
 
 	const handleUnirseTorneo = () => {
-		if (values?.id_juego === 2) {
+		if (values?.torneo?.id_juego === 2) {
 			unirseTorneoTFT(
 				user,
 				values.torneo.id_torneo,
 				setResponseError,
 				handleClickOpen
 			);
-		} else if (values?.id_juego === 1) {
-			// dialog
 		}
 	};
 
