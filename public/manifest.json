@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "E-sportscom",
+  "name": "E-sportscom, Crea torneos o compite con otros jugadores",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +18,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/login",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#28527A",
+  "background_color": "#28527A",
+  "description": "Aplicacion web progresiva para la creacion de torneos de e-sports dentro de la comunidad de ESCOM, con la finalidad de que los jugadores puedan crear torneos y competir con otros jugadores."
 }

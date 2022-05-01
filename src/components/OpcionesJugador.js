@@ -5,12 +5,15 @@ import DashboardBuscarTorneos from './DashboardJugador/DashboardBuscarTorneos';
 import DashboardMisEquipos from './DashboardJugador/DashboardMisEquipos';
 import DashboardVerMisTorneosInscritos from './DashboardJugador/DashboardVerMisTorneosInscritos';
 import DashboardHistorialTorneos from './DashboardJugador/DashboardHistorialTorneos';
+import InstallPWA from '../hooks/installPWA';
+
 const buttonExtraStyles = {
 	fontSize: 20,
 };
 
 const OpcionesJugador = () => {
 	const { changeComponent } = useContext(DashBoardJugadorContext);
+	const ButtonPWA = InstallPWA();
 	return (
 		<Grid
 			container
@@ -43,6 +46,7 @@ const OpcionesJugador = () => {
 				color='secondary'>
 				Mis equipos
 			</Button>
+			{ButtonPWA}
 		</Grid>
 	);
 };
