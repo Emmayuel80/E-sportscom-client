@@ -7,13 +7,6 @@ import {
 	ListItemText,
 	Collapse,
 	Avatar,
-	// Avatar,
-	// Table,
-	// TableBody,
-	// TableCell,
-	// TableContainer,
-	// TableHead,
-	// TableRow,
 } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -22,9 +15,10 @@ import DashboardJugadorContext from '../../context/DashboardJugadorContext';
 import ResponseError from '../ResponseError';
 import JUEGOS from '../../constants/Juegos.json';
 import COLORS from '../../constants/Colors.json';
+import ETAPAS from '../../constants/Etapas.json';
 import JoinLOLTournamentDialog from '../JoinLOLTournamentDialog.js';
 import getPartidaLoL from '../../services/jugador/getPartidaLoL.js';
-
+/* eslint-disable complexity */
 const DashboardVerTorneoLOL = ({ idTorneo }) => {
 	// Context
 	const { user } = React.useContext(DashboardJugadorContext);
@@ -36,6 +30,7 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 	const [logos, setLogos] = React.useState([]);
 	const [verEquipo, setVerEquipo] = React.useState([]);
 	const [dataPartida, setDataPartida] = React.useState(null);
+	const [etapas, setEtapas] = React.useState({});
 
 	const [open, setOpen] = React.useState(false);
 
@@ -69,10 +64,10 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 			console.log(values);
 			if (values.torneo.id_estado === 3) {
 				console.log(`id_edo: ${values.torneo.id_estado}`);
-				const firstPos = values.torneo.participantes.filter(
-					(participante) => participante.posicion === 1
+				const firstPos = values.torneo.participantes.find(
+					(participante) => participante.ganador === 1
 				);
-				setGanador(firstPos[0]);
+				setGanador(firstPos);
 			}
 
 			const participantes = values.torneo.participantes;
@@ -93,6 +88,17 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 			setLogos(logos);
 
 			getPartidaLoL(user.token, idTorneo, setResponseError, setDataPartida);
+			const partidas = values.torneo.partidas;
+			const etapasAux = {};
+			partidas.forEach((partida) => {
+				if (etapasAux[partida.etapa]) {
+					etapasAux[partida.etapa].push(partida);
+				} else {
+					etapasAux[partida.etapa] = [partida];
+				}
+			});
+			console.log(etapasAux);
+			setEtapas(etapasAux);
 		}
 	}, [values]);
 
@@ -175,7 +181,7 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 			{ganador && (
 				<Grid item container justifyContent='center' direction='row'>
 					<Typography sx={{ color: 'white' }} variant='h5'>
-						Ganador: {ganador.nombre}
+						Ganador: {ganador.equipo}
 					</Typography>
 				</Grid>
 			)}
@@ -195,7 +201,7 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 				<Grid item xs={12}>
 					<Grid item xs={12}>
 						<Typography sx={{ color: 'white' }} variant='h4'>
-							Partida en curso
+							Tu partida en curso
 						</Typography>
 					</Grid>
 					<Grid item xs={12}>
@@ -285,6 +291,163 @@ const DashboardVerTorneoLOL = ({ idTorneo }) => {
 					</Grid>
 				</Grid>
 			)}
+			<Grid item xs={12}>
+				<Typography sx={{ color: 'white' }} variant='h4'>
+					Partidas
+				</Typography>
+			</Grid>
+			{etapas &&
+				Object.values(etapas).map((etapa, index) => {
+					return (
+						<Grid key={JSON.stringify(etapa) + index} item xs={12}>
+							{etapa.every((partida) => partida?.id_ganador) && (
+								<>
+									<Grid item xs={12}>
+										<Typography sx={{ color: 'white' }} variant='h4'>
+											Etapa: {ETAPAS[etapa[0].etapa]}
+										</Typography>
+									</Grid>
+									<Divider sx={{ backgroundColor: 'white' }} />
+								</>
+							)}
+							{etapa &&
+								etapa.map((partida) => {
+									// es-lint disable complexity
+									if (!partida?.id_ganador) return <Grid></Grid>;
+									return (
+										<Grid
+											sx={{
+												backgroundColor: partida?.id_ganador
+													? '#287A79'
+													: '#7A2828',
+												borderRadius: 5,
+												mb: 5,
+												mt: 3,
+												p: 3,
+												cursor: !partida?.id_ganador ? 'pointer' : '',
+											}}
+											key={JSON.stringify(partida)}>
+											<Grid item xs={12}>
+												<Typography sx={{ color: 'white' }} variant='h6'>
+													Fecha jugada :{' '}
+													{new Date(partida?.fecha_jugada).toLocaleString()}
+												</Typography>
+												<Grid item container justifyContent='start'>
+													<Typography
+														sx={{ color: 'white', pr: 1 }}
+														variant='h6'>
+														Ganador:
+													</Typography>
+													<Typography
+														sx={{ color: 'white', fontWeight: 'bold' }}
+														variant='h6'>
+														{partida?.id_ganador ? partida?.nombre_ganador : ''}
+													</Typography>
+												</Grid>
+											</Grid>
+											<Grid item xs={12}>
+												{partida.equipo1 && (
+													<Grid container>
+														<Grid
+															sx={{
+																backgroundColor: COLORS.secondary.main,
+																borderRadius: '1rem',
+																width: '100%',
+																my: 3,
+																opacity:
+																	partida?.id_ganador &&
+																	partida.id_equipo1 === partida?.id_ganador
+																		? 1
+																		: 0.5,
+															}}>
+															<Grid
+																sx={{ py: 1.5, px: 1.5 }}
+																justifyContent='space-between'
+																alignItems='center'
+																item
+																container
+																direction='row'>
+																<Grid item xs={6} sx={{ height: '70px' }}>
+																	<Typography
+																		sx={{
+																			overflowWrap: 'break-word',
+																			inlineSize: '200px',
+																		}}
+																		variant='h5'>
+																		{partida.equipo1}
+																	</Typography>
+																</Grid>
+																<Grid
+																	container
+																	justifyContent='end'
+																	item
+																	xs={6}>
+																	<Avatar
+																		sx={{ width: 64, height: 64 }}
+																		src={partida.logo1}
+																		variant='rounded'
+																		aria-label='recipe'></Avatar>
+																</Grid>
+															</Grid>
+														</Grid>
+														<Grid item xs={12} sx={{ mb: 3 }}>
+															<Typography
+																sx={{ color: 'white', textAlign: 'center' }}
+																variant='h4'>
+																VS
+															</Typography>
+														</Grid>
+														<Grid
+															sx={{
+																backgroundColor: COLORS.secondary.main,
+																borderRadius: '1rem',
+																width: '100%',
+																mb: 5,
+																opacity:
+																	partida?.id_ganador &&
+																	partida.id_equipo2 === partida.id_ganador
+																		? 1
+																		: 0.5,
+															}}>
+															<Grid
+																sx={{ py: 1.5, px: 1.5 }}
+																justifyContent='space-between'
+																alignItems='center'
+																item
+																container
+																direction='row'>
+																<Grid item xs={6} sx={{ height: '70px' }}>
+																	<Typography
+																		sx={{
+																			overflowWrap: 'break-word',
+																			inlineSize: '200px',
+																		}}
+																		variant='h5'>
+																		{partida.equipo2}
+																	</Typography>
+																</Grid>
+																<Grid
+																	container
+																	justifyContent='end'
+																	item
+																	xs={6}>
+																	<Avatar
+																		sx={{ width: 64, height: 64 }}
+																		src={partida.equipo2.logo2}
+																		variant='rounded'
+																		aria-label='recipe'></Avatar>
+																</Grid>
+															</Grid>
+														</Grid>
+													</Grid>
+												)}
+											</Grid>
+										</Grid>
+									);
+								})}
+						</Grid>
+					);
+				})}
 			<Grid item xs={12}>
 				<Typography sx={{ color: 'white' }} variant='h4'>
 					Participantes{' '}

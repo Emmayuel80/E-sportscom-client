@@ -14,6 +14,7 @@ import MaterialIcon from 'material-icons-react';
 import Navbar from '../components/Navbar';
 import PublicForm from '../components/PublicForm';
 import ResponseError from '../components/ResponseError';
+import InstallPWALogin from '../hooks/installPWALogin';
 const Login = () => {
 	const [values, setValues] = React.useState({
 		email: '',
@@ -89,6 +90,7 @@ const Login = () => {
 		}
 	}, []);
 
+	const installPWALogin = InstallPWALogin();
 	return (
 		<Grid container sx={{ minHeight: '100vh' }}>
 			<Navbar isPublic={true}></Navbar>
@@ -162,6 +164,7 @@ const Login = () => {
 				</Grid>
 				<ResponseError error={responseError}></ResponseError>
 			</PublicForm>
+			<Grid>{installPWALogin}</Grid>
 		</Grid>
 	);
 };
