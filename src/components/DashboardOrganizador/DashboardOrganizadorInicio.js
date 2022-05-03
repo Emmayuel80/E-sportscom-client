@@ -99,8 +99,9 @@ const DashboardOrganizadorInicio = () => {
 					<Grid item xs={12} xl={4}>
 						<CircularDisplay
 							data={{
-								value: data.torneosActivos?.length,
-								description: 'Torneos de juegos',
+								value:
+									data.torneosCreados?.length - data.torneosActivos?.length,
+								description: 'Torneos finalizados',
 							}}></CircularDisplay>
 					</Grid>
 				</Grid>
