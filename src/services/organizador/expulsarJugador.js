@@ -5,7 +5,8 @@ export default function (
 	setResponseError,
 	values,
 	setValues,
-	setDisableAll
+	setDisableAll,
+	isTeam = false
 ) {
 	setDisableAll(true);
 	fetch(
@@ -24,7 +25,7 @@ export default function (
 				setResponseError(response.msg);
 			} else {
 				const newParticipantes = values.participantes.filter(
-					(element) => element.id_usuario !== idJugador
+					(element) => isTeam ? (element.id_equipo !== idJugador) : (element.id_usuario !== idJugador)
 				);
 				setValues({ ...values, participantes: newParticipantes });
 				setDisableAll(false);

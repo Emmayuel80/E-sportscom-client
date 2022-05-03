@@ -181,6 +181,10 @@ const DashboardVerJugador = () => {
 								No existen torneos con ese nombre
 							</Typography>
 						</Grid>
+					) : torneos.error ? (
+						<Typography variant='h3' sx={{ color: 'white' }}>
+							No se han encontrado torneos disponibles.
+						</Typography>
 					) : (
 						<Grid
 							item

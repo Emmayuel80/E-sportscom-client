@@ -39,7 +39,7 @@ const DashboardVerTorneosInscritos = () => {
 		<Grid item xs={12} container justifyContent='center' direction='row'>
 			<Grid item xs={12}>
 				<Typography sx={{ color: 'white' }} variant='h3'>
-					Torneos en los que estas inscrito.
+					Torneos en los que estás inscrito
 				</Typography>
 			</Grid>
 			<Grid

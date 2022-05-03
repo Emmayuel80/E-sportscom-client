@@ -14,6 +14,7 @@ import MaterialIcon from 'material-icons-react';
 import Navbar from '../components/Navbar';
 import PublicForm from '../components/PublicForm';
 import ResponseError from '../components/ResponseError';
+import InstallPWALogin from '../hooks/installPWALogin';
 const Login = () => {
 	const [values, setValues] = React.useState({
 		email: '',
@@ -63,6 +64,7 @@ const Login = () => {
 				if (response.error) {
 					setResponseError(response.error);
 				} else {
+					response.data.riot_api = JSON.parse(response.data.riot_api);
 					localStorage.setItem('data', JSON.stringify(response.data));
 					if (response.data.tipo === 'jugador') {
 						window.location.href = '/dashboardJugador';
@@ -88,6 +90,7 @@ const Login = () => {
 		}
 	}, []);
 
+	const installPWALogin = InstallPWALogin();
 	return (
 		<Grid container sx={{ minHeight: '100vh' }}>
 			<Navbar isPublic={true}></Navbar>
@@ -138,7 +141,7 @@ const Login = () => {
 						fullWidth
 						variant='contained'
 						color='primary'>
-						Iniciar Sesion
+						Iniciar Sesión
 					</Button>
 				</Grid>
 				<Grid item sx={{ py: 1 }} xs={12} md={12} lg={12}>
@@ -161,6 +164,7 @@ const Login = () => {
 				</Grid>
 				<ResponseError error={responseError}></ResponseError>
 			</PublicForm>
+			<Grid>{installPWALogin}</Grid>
 		</Grid>
 	);
 };

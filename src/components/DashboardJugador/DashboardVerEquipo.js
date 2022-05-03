@@ -9,6 +9,7 @@ import {
 	TableHead,
 	TableRow,
 	Tooltip,
+	Button,
 	Typography,
 } from '@mui/material';
 import React from 'react';
@@ -22,6 +23,8 @@ import getEquipo from '../../services/jugador/getEquipo';
 import CopyToClipboard from '../CopyToClipboard';
 import DashboardEditEquipo from './DashboardEditEquipo';
 import kickPlayerFromTeam from '../../services/jugador/kickPlayerFromTeam';
+import DialogBitacora from '../DialogBitacora';
+import getBitacoraEquipo from '../../services/jugador/getBitacoraEquipo';
 
 // TODO
 // const capitan = true;
@@ -34,8 +37,14 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 	const [isCaptain, setIsCaptain] = React.useState(false);
 	const [openClipboard, setOpenClipboard] = React.useState(false);
 	const [disableAll, setDisableAll] = React.useState(false);
+	const [openDialogBitacora, setOpenDialogBitacora] = React.useState(false);
+	const [bitacora, setBitacora] = React.useState([]);
 	// Handlers
-
+	const handleBitacoraEquipo = () => {
+		getBitacoraEquipo(user, idEquipo, setBitacora, setResponseError).then(() => {
+			setOpenDialogBitacora(true);
+		});
+	};
 	// UseEffect
 	React.useEffect(() => {
 		getEquipo(user, idEquipo, setValues, setResponseError);
@@ -111,6 +120,9 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 						setOpen={setOpenClipboard}
 						copy={values.equipo.codigo_equipo}></CopyToClipboard>
 				</Grid>
+				<Grid  direction='row' item xs={12}>
+					{ isCaptain && <Button variant='contained' color='secondary' onClick={handleBitacoraEquipo}>Ver bitacora de equipo.</Button>}
+				</Grid>
 			</Grid>
 			<Grid
 				sx={{ width: '80vw' }}
@@ -147,12 +159,22 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 												/>
 											</TableCell>
 											<TableCell>
-												<Typography
-													sx={{ color: 'white' }}
-													variant='body2'
-													component='span'>
-													{element.nombre}
-												</Typography>
+												<Grid
+													container
+													justifyContent='start'
+													alignItems='center'
+													item
+													xs={12}>
+													<Typography
+														sx={{ color: 'white', pr: 5 }}
+														variant='body2'
+														component='span'>
+														{element.nombre}
+													</Typography>
+													{element.capitan === 1 && (
+														<MaterialIcon icon='star'></MaterialIcon>
+													)}
+												</Grid>
 											</TableCell>
 											<TableCell>
 												<Typography
@@ -197,6 +219,7 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 			</Grid>
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
+				<DialogBitacora open={openDialogBitacora} setOpen={setOpenDialogBitacora} bitacoraArray={bitacora} ></DialogBitacora>
 			</Grid>
 		</Grid>
 	);

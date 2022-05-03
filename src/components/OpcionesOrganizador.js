@@ -5,6 +5,7 @@ import DashboardOrganizadorInicio from './DashboardOrganizador/DashboardOrganiza
 import DashboardOrganizadorCrearTorneo from './DashboardOrganizador/DashboardOrganizadorCrearTorneo';
 import DashboardOrganizadorMisTorneos from './DashboardOrganizador/DashboardOrganizadorMisTorneos';
 import DashboardOrganizadorVerHistorialDeTorneos from './DashboardOrganizador/DashboardOrganizadorVerHistorialDeTorneos';
+import InstallPWA from '../hooks/installPWA';
 
 const buttonExtraStyles = {
 	fontSize: 20,
@@ -12,6 +13,7 @@ const buttonExtraStyles = {
 
 const OpcionesOrganizador = () => {
 	const { changeComponent } = useContext(DashBoardOrganizadorContext);
+	const ButtonPWA = InstallPWA();
 	return (
 		<Grid
 			container
@@ -50,9 +52,7 @@ const OpcionesOrganizador = () => {
 				color='secondary'>
 				Historial de torneos
 			</Button>
-			<Button sx={buttonExtraStyles} variant='text' color='secondary'>
-				Ver bitacora torneos
-			</Button>
+			{ButtonPWA}
 		</Grid>
 	);
 };

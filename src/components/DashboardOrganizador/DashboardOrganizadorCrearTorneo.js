@@ -19,7 +19,16 @@ import JUEGOS from '../../constants/Juegos.json';
 import ResponseError from '../ResponseError';
 import crearTorneo from '../../services/organizador/crearTorneo';
 import DashboardOrganizadorContext from '../../context/DashboardOrganizadorContext';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+	menuPaper: {
+		maxHeight: 170,
+		overflowY: 'scroll',
+	},
+}));
 const DashboardOrganizadorCrearTorneo = () => {
+	const classes = useStyles();
 	// checar que id juego coincida con los equipos
 	const [fechaFinRegistro, setFechaFinRegistro] = React.useState(null);
 	const [fechaInicio, setFechaInicio] = React.useState(null);
@@ -33,6 +42,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 		privado: false,
 		descPremio: '',
 		descTorneo: '',
+		horaInicio: 17,
 	});
 	const [responseError, setResponseError] = React.useState(false);
 	const handleChange = (prop) => (event) => {
@@ -67,12 +77,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 					</FormControl>
 				</Grid>
 				<Grid item container>
-					<Grid
-						sx={{ py: 2, px: 1 }}
-						item
-						xs={12}
-						md={values.idJuego !== '' ? 6 : 12}
-						lg={values.idJuego !== '' ? 6 : 12}>
+					<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
 						<FormControl fullWidth>
 							<InputLabel id='juego-select'>Juego</InputLabel>
 							<Select
@@ -93,7 +98,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 					</Grid>
 
 					{values.idJuego === '1' && (
-						<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
+						<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
 							<FormControl fullWidth>
 								<InputLabel id='equipos-select'>No. Equipos</InputLabel>
 								<Select
@@ -111,7 +116,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 					)}
 					{values.idJuego === '2' && (
 						<>
-							<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
+							<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
 								<FormControl fullWidth>
 									<InputLabel id='equipos-select'>No. Participantes</InputLabel>
 									<Select
@@ -122,21 +127,7 @@ const DashboardOrganizadorCrearTorneo = () => {
 										onChange={handleChange('noEquipos')}>
 										<MenuItem value={8}>8 Jugadores</MenuItem>
 										<MenuItem value={16}>16 Jugadores</MenuItem>
-									</Select>
-								</FormControl>
-							</Grid>
-							<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
-								<FormControl fullWidth>
-									<InputLabel id='rondas-select'>Rondas</InputLabel>
-									<Select
-										required
-										labelId='rondas-select'
-										value={values.noEnfrentamientos}
-										label='No. Rondas'
-										onChange={handleChange('noEnfrentamientos')}>
-										<MenuItem value={2}>2 Rondas</MenuItem>
-										<MenuItem value={4}>4 Rondas</MenuItem>
-										<MenuItem value={8}>8 Rondas</MenuItem>
+										<MenuItem value={32}>32 Jugadores</MenuItem>
 									</Select>
 								</FormControl>
 							</Grid>
@@ -173,6 +164,28 @@ const DashboardOrganizadorCrearTorneo = () => {
 						</FormControl>
 					</Grid>
 				</Grid>
+				<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
+					<FormControl fullWidth>
+						<InputLabel id='equipos-select'>Hora de inicio</InputLabel>
+						<Select
+							MenuProps={{ classes: { paper: classes.menuPaper } }}
+							required
+							labelId='hora-select'
+							value={values.horaInicio}
+							label='Hora de inicio'
+							onChange={handleChange('horaInicio')}>
+							{Array(24)
+								.fill(0)
+								.map((value, index) => {
+									return (
+										<MenuItem key={index} value={index}>
+											{index + ':00 horas'}
+										</MenuItem>
+									);
+								})}
+						</Select>
+					</FormControl>
+				</Grid>
 				<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
 					<FormControlLabel
 						label='¿Vas a ofrecer un premio?'
@@ -180,18 +193,6 @@ const DashboardOrganizadorCrearTorneo = () => {
 							<Checkbox
 								onChange={(event) => {
 									setValues({ ...values, premio: !values.premio });
-								}}
-								inputProps={{ 'aria-label': 'controlled' }}
-							/>
-						}></FormControlLabel>
-				</Grid>
-				<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
-					<FormControlLabel
-						label='¿El torneo es privado?'
-						control={
-							<Checkbox
-								onChange={(event) => {
-									setValues({ ...values, privado: !values.privado });
 								}}
 								inputProps={{ 'aria-label': 'controlled' }}
 							/>
@@ -208,6 +209,19 @@ const DashboardOrganizadorCrearTorneo = () => {
 							onChange={handleChange('descPremio')}></TextField>
 					</Grid>
 				)}
+				<Grid sx={{ py: 2, px: 1 }} item xs={12} md={6} lg={6}>
+					<FormControlLabel
+						label='¿El torneo es privado?'
+						control={
+							<Checkbox
+								onChange={(event) => {
+									setValues({ ...values, privado: !values.privado });
+								}}
+								inputProps={{ 'aria-label': 'controlled' }}
+							/>
+						}></FormControlLabel>
+				</Grid>
+
 				<Grid sx={{ py: 2, px: 1 }} item xs={12} md={12} lg={12}>
 					<TextField
 						fullWidth

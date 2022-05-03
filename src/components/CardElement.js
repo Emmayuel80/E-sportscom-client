@@ -9,7 +9,8 @@ import COLORS from '../constants/Colors.json';
 import JUEGOS from '../constants/Juegos.json';
 import PropTypes from 'prop-types';
 import DashboardOrganizadorContext from '../context/DashboardOrganizadorContext';
-import DashboardOrganizadorVerTorneo from './DashboardOrganizador/DashboardOrganizadorVerTorneo';
+import DashboardOrganizadorVerTorneoTFT from './DashboardOrganizador/DashboardOrganizadorVerTorneoTFT';
+import DashboardOrganizadorVerTorneoLOL from './DashboardOrganizador/DashboardOrganizadorVerTorneoLOL';
 // import MaterialIcon from 'material-icons-react';
 import DashboardOrganizadorEditarTorneo from './DashboardOrganizador/DashboardOrganizadorEditarTorneo';
 
@@ -25,7 +26,11 @@ const CardElement = ({ edicionHabilitada = true, data }) => {
 			<CardActionArea
 				onClick={(e) =>
 					changeComponent(
-						<DashboardOrganizadorVerTorneo idTorneo={data.id_torneo} />
+						data.id_juego === 1 ? (
+							<DashboardOrganizadorVerTorneoLOL idTorneo={data.id_torneo} />
+						) : (
+							<DashboardOrganizadorVerTorneoTFT idTorneo={data.id_torneo} />
+						)
 					)
 				}
 				sx={{ p: 2 }}>
