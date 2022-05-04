@@ -11,6 +11,11 @@ import {
 	Tooltip,
 	Button,
 	Typography,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
 } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -25,6 +30,7 @@ import DashboardEditEquipo from './DashboardEditEquipo';
 import kickPlayerFromTeam from '../../services/jugador/kickPlayerFromTeam';
 import DialogBitacora from '../DialogBitacora';
 import getBitacoraEquipo from '../../services/jugador/getBitacoraEquipo';
+import deletePlayerFromTeam from '../../services/jugador/deletePlayerFromTeam';
 
 // TODO
 // const capitan = true;
@@ -38,12 +44,16 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 	const [openClipboard, setOpenClipboard] = React.useState(false);
 	const [disableAll, setDisableAll] = React.useState(false);
 	const [openDialogBitacora, setOpenDialogBitacora] = React.useState(false);
+	const [openDialogEliminarEquipo, setOpenDialogEliminarEquipo] =
+		React.useState(false);
 	const [bitacora, setBitacora] = React.useState([]);
 	// Handlers
 	const handleBitacoraEquipo = () => {
-		getBitacoraEquipo(user, idEquipo, setBitacora, setResponseError).then(() => {
-			setOpenDialogBitacora(true);
-		});
+		getBitacoraEquipo(user, idEquipo, setBitacora, setResponseError).then(
+			() => {
+				setOpenDialogBitacora(true);
+			}
+		);
 	};
 	// UseEffect
 	React.useEffect(() => {
@@ -120,9 +130,44 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 						setOpen={setOpenClipboard}
 						copy={values.equipo.codigo_equipo}></CopyToClipboard>
 				</Grid>
-				<Grid  direction='row' item xs={12}>
-					{ isCaptain && <Button variant='contained' color='secondary' onClick={handleBitacoraEquipo}>Ver bitacora de equipo.</Button>}
+				<Grid direction='row' item xs={12}>
+					{isCaptain && (
+						<Button
+							variant='contained'
+							color='secondary'
+							onClick={handleBitacoraEquipo}>
+							Ver bitacora de equipo.
+						</Button>
+					)}
 				</Grid>
+			</Grid>
+			<Grid item container justifyContent='start' alignItems='center'>
+				{isCaptain ? (
+					<Button
+						variant='contained'
+						color='secondary'
+						disabled={disableAll}
+						onClick={(e) => setOpenDialogEliminarEquipo(true)}>
+						Eliminar Equipo
+					</Button>
+				) : (
+					<Button
+						variant='contained'
+						color='secondary'
+						disabled={disableAll}
+						onClick={(e) =>
+							deletePlayerFromTeam(
+								user.token,
+								values.id_jugador,
+								idEquipo,
+								setResponseError,
+								changeComponent,
+								setDisableAll
+							)
+						}>
+						Abandonar Equipo
+					</Button>
+				)}
 			</Grid>
 			<Grid
 				sx={{ width: '80vw' }}
@@ -219,7 +264,54 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 			</Grid>
 			<Grid item>
 				<ResponseError error={responseError}></ResponseError>
-				<DialogBitacora open={openDialogBitacora} setOpen={setOpenDialogBitacora} bitacoraArray={bitacora} ></DialogBitacora>
+				<DialogBitacora
+					open={openDialogBitacora}
+					setOpen={setOpenDialogBitacora}
+					bitacoraArray={bitacora}></DialogBitacora>
+			</Grid>
+			<Grid item>
+				<Dialog
+					open={openDialogEliminarEquipo}
+					aria-labelledby='alert-dialog-title'
+					aria-describedby='alert-dialog-description'>
+					<DialogTitle
+						sx={{ color: 'white', fontWeight: 'bold' }}
+						id='alert-dialog-title'>
+						{'¿Borrar Equipo?'}
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText
+							sx={{ color: 'white' }}
+							id='alert-dialog-description'>
+							Estas apunto de borrar el equipo: <i>{values.equipo.nombre}</i>
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							variant='outlined'
+							color='secondary'
+							onClick={(e) => setOpenDialogEliminarEquipo(false)}>
+							Cancelar
+						</Button>
+						<Button
+							variant='contained'
+							color='error'
+							onClick={(e) => {
+								deletePlayerFromTeam(
+									user.token,
+									values.id_jugador,
+									idEquipo,
+									setResponseError,
+									changeComponent,
+									setDisableAll
+								);
+								setOpenDialogEliminarEquipo(false);
+							}}
+							autoFocus>
+							Confirmar
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Grid>
 		</Grid>
 	);
