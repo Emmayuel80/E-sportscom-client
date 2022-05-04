@@ -158,7 +158,7 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 						onClick={(e) =>
 							deletePlayerFromTeam(
 								user.token,
-								values.id_jugador,
+								user.id_usuario,
 								idEquipo,
 								setResponseError,
 								changeComponent,
@@ -299,7 +299,7 @@ const DashboardVerEquipo = ({ idEquipo }) => {
 							onClick={(e) => {
 								deletePlayerFromTeam(
 									user.token,
-									values.id_jugador,
+									user.id_usuario,
 									idEquipo,
 									setResponseError,
 									changeComponent,

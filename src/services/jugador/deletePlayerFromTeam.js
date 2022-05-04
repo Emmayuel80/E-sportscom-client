@@ -22,8 +22,8 @@ export default function (
 	})
 		.then((response) => response.json())
 		.then((response) => {
-			if (response.err) {
-				setResponseError(response.msg);
+			if (response.error) {
+				setResponseError(response.error);
 				setDisableAll(false);
 			} else {
 				changeComponent(<DashboardMisEquipos />);
