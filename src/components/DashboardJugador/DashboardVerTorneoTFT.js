@@ -1,5 +1,4 @@
 import {
-  Divider,
   Grid,
   Typography,
   Avatar,
@@ -21,8 +20,7 @@ import PropTypes from "prop-types";
 import getDataTorneo from "../../services/jugador/getDataTorneo.js";
 import DashboardJugadorContext from "../../context/DashboardJugadorContext";
 import ResponseError from "../ResponseError";
-// import JUEGOS from '../../constants/Juegos.json';
-import COLORS from "../../constants/Colors.json";
+import JUEGOS from "../../constants/Juegos.json";
 import AvatarImg from "../../pngegg.png";
 import unirseTorneoTFT from "../../services/jugador/unirseTorneoTFT.js";
 import DashboardBuscarTorneos from "./DashboardBuscarTorneos";
@@ -30,8 +28,13 @@ import DashboardVerMisTorneosInscritos from "./DashboardVerMisTorneosInscritos";
 import CardEnfrentamientoTFT from "../CardEnfrentamientoTFT.js";
 import getEnfrentamientosJugador from "../../services/jugador/getEnfrentamientosJugador.js";
 import DashboardVerEnfrentamientoTFT from "./DashboardVerEnfrentamientoTFT.js";
+import MaterialIcon from "material-icons-react";
 // import MaterialIcon from 'material-icons-react';
 // import ESTADOS from '../../constants/Estados.json';
+/* eslint-disable complexity */
+const textStyle = {
+  color: "white",
+};
 const DashboardVerTorneo = ({ idTorneo }) => {
   // Context
   const { user, changeComponent } = React.useContext(DashboardJugadorContext);
@@ -82,6 +85,7 @@ const DashboardVerTorneo = ({ idTorneo }) => {
   }, [values]);
 
   // console.log(ganador);
+
   return !values ? (
     <Grid item></Grid>
   ) : (
@@ -98,89 +102,168 @@ const DashboardVerTorneo = ({ idTorneo }) => {
             {values.torneo.nombre}
           </Typography>
         </Grid>
-        {/* <Grid xs={12} sx={{ py: 2, px: 1, fontWeight: 'bold' }} item>
-					<Typography sx={{ color: 'white' }} variant='h5'>
-						{JUEGOS[values.torneo.id_juego]}
-					</Typography>
-				</Grid> */}
+        <Grid xs={12} sx={{ py: 2, px: 1, fontWeight: "bold" }} item>
+          <Typography sx={{ color: "white" }} variant="h5">
+            {JUEGOS[values.torneo.id_juego]}
+          </Typography>
+        </Grid>
+        <Grid container alignContent="start" item xs={12}>
+          {!values.torneo.participantes.some(
+            (value) => value.id_usuario === user.id_usuario
+          ) && (
+            <Button
+              onClick={handleUnirseTorneo}
+              variant="contained"
+              color="secondary"
+            >
+              UNIRSE AL TORNEO
+            </Button>
+          )}
+        </Grid>
         <Grid
           item
-          container
-          justifyContent={"start"}
           xs={12}
-          direction="row"
-          sx={{
-            display: "flex",
-            px: 0.3,
-            alignItems: "center",
-            width: "fit-content",
-            border: `1px solid ${COLORS.secondary.main}`,
-            borderRadius: 1,
-            bgcolor: COLORS.primary.main,
-            color: "black",
-            "& svg": {
-              m: 0.5,
-            },
-            "& hr": {
-              mx: 0.5,
-            },
-          }}
+          sx={{ backgroundColor: "#287A79", p: 5, mt: 3, borderRadius: 5 }}
         >
-          <Grid item sx={{ px: 0.5 }}>
-            <Typography sx={{ color: "white" }} variant="span">
-              {values.torneo.description}
-            </Typography>
-          </Grid>
-          <Divider
-            sx={{ background: COLORS.secondary.main }}
-            orientation="vertical"
-            variant="middle"
-            flexItem
-          />
-          <Grid item sx={{ px: 0.5 }}>
-            <Typography sx={{ color: "white" }} variant="span">
-              {" "}
-              Fecha inicio:{" "}
-              {new Date(values.torneo.fecha_inicio).toLocaleDateString()}
-            </Typography>
-          </Grid>
-          <Divider
-            sx={{ background: COLORS.secondary.main }}
-            orientation="vertical"
-            variant="middle"
-            flexItem
-          />
-          <Grid item sx={{ px: 0.5 }}>
-            <Typography sx={{ color: "white" }} variant="span">
-              {" "}
-              Fecha fin registro:{" "}
-              {new Date(values.torneo.fecha_fin_registro).toLocaleDateString()}
-            </Typography>
+          <Grid
+            sx={{ px: 3 }}
+            xs={12}
+            item
+            container
+            direction="row"
+            justifyContent="space-around"
+          >
+            <Grid xs={12} md={12} item container alignItems="center">
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="abc"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {values.torneo.description}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container alignItems="center">
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="event"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {" "}
+                  Fecha inicio:{" "}
+                  {new Date(values.torneo.fecha_inicio).toLocaleDateString()}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container alignItems="center">
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="lock_clock"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {" "}
+                  Fecha fin registro:{" "}
+                  {new Date(
+                    values.torneo.fecha_fin_registro
+                  ).toLocaleDateString()}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="access_time"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {" "}
+                  Hora de inicio: {`${values.torneo.hora_inicio}:00`}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="emoji_events"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  Premio:{" "}
+                  {values.torneo.premio
+                    ? values.torneo.desc_premio
+                    : "Sin premio"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="sports_esports"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  No. total de enfrentamientos:{" "}
+                  {values.torneo.no_enfrentamientos}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="account_circle"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  Organizado por: {values.torneo.organizador.nombre}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="contact_mail"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  Contacto: {values.torneo.organizador.email}
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
       {ganador && (
-        <Grid item container justifyContent="center" direction="row">
-          <Typography sx={{ color: "white" }} variant="h5">
-            Ganador: {ganador.nombre}
-          </Typography>
+        <Grid
+          item
+          container
+          justifyContent="center"
+          direction="row"
+          alignItems="center"
+          sx={{
+            backgroundColor: "#d4af37",
+            p: 5,
+            borderRadius: 5,
+          }}
+        >
+          <Grid item>
+            <MaterialIcon size="large" icon="emoji_events"></MaterialIcon>
+          </Grid>
+          <Grid item>
+            <Typography
+              sx={{ color: "black", fontWeight: "bold" }}
+              variant="h5"
+            >
+              Ganador: {ganador.nombre}
+            </Typography>
+          </Grid>
         </Grid>
       )}
-      <Grid container alignContent="start" item xs={12}>
-        {!values.torneo.participantes.some(
-          (value) => value.id_usuario === user.id_usuario
-        ) && (
-          <Button
-            onClick={handleUnirseTorneo}
-            variant="contained"
-            color="secondary"
-          >
-            UNIRSE AL TORNEO
-          </Button>
-        )}
-      </Grid>
-      <Grid item>
-        <Grid item sx={{ my: 5 }} xs={12}>
+
+      <Grid
+        item
+        sx={{
+          backgroundColor: "#1a3650",
+          p: 5,
+          mt: 3,
+          borderRadius: 5,
+        }}
+      >
+        <Grid item xs={12}>
           <Typography sx={{ color: "white" }} variant="h4">
             Participantes{" "}
           </Typography>
@@ -261,7 +344,15 @@ const DashboardVerTorneo = ({ idTorneo }) => {
         </Grid>
       </Grid>
       {values?.torneo?.id_estado === 2 && (
-        <Grid item>
+        <Grid
+          item
+          sx={{
+            backgroundColor: "#1a3650",
+            p: 5,
+            mt: 3,
+            borderRadius: 5,
+          }}
+        >
           <Grid item sx={{ my: 5 }} xs={12}>
             <Typography sx={{ color: "white" }} variant="h4">
               Enfrentamientos{" "}

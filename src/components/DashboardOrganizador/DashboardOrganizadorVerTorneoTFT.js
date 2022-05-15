@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Divider,
   Grid,
   IconButton,
   Table,
@@ -19,7 +18,6 @@ import getDataTorneo from "../../services/organizador/getDataTorneo";
 import DashboardOrganizadorContext from "../../context/DashboardOrganizadorContext";
 import ResponseError from "../ResponseError";
 import JUEGOS from "../../constants/Juegos.json";
-import COLORS from "../../constants/Colors.json";
 import AvatarImg from "../../pngegg.png";
 import MaterialIcon from "material-icons-react";
 import expulsarJugador from "../../services/organizador/expulsarJugador";
@@ -27,6 +25,10 @@ import DialogBitacora from "../DialogBitacora";
 import DialogEnfrentamientoTFT from "../DialogEnfrentamientoTFT";
 import getBitacoraTorneo from "../../services/organizador/getBitacoraTorneo";
 import CardEnfrentamientoTFT from "../CardEnfrentamientoTFT";
+import CopyToClipboard from "../CopyToClipboard";
+const textStyle = {
+  color: "white",
+};
 const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
   // Context
   const { user } = React.useContext(DashboardOrganizadorContext);
@@ -42,6 +44,7 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
   const [enfrentamientoSeleccionado, setEnfrentamientoSeleccionado] =
     React.useState({});
   const [enfrentamientos, setEnfrentamientos] = React.useState(null);
+  const [openClipboard, setOpenClipboard] = React.useState(false);
   // Handlers
   const handleBitacoraEquipo = () => {
     getBitacoraTorneo(user, idTorneo, setBitacora, setResponseError).then(
@@ -93,89 +96,162 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
             {JUEGOS[values.torneo.id_juego]}
           </Typography>
         </Grid>
+        <Grid item container justifyContent="start">
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleBitacoraEquipo}
+            >
+              Ver bitacora de torneo.
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{ backgroundColor: "#287A79", p: 5, mt: 3, borderRadius: 5 }}
+        >
+          <Grid
+            sx={{ px: 3 }}
+            xs={12}
+            item
+            container
+            direction="row"
+            justifyContent="space-around"
+          >
+            <Grid xs={12} md={12} item container alignItems="center">
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="abc"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {values.torneo.description}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container alignItems="center">
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="event"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {" "}
+                  Fecha inicio:{" "}
+                  {new Date(values.torneo.fecha_inicio).toLocaleDateString()}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container alignItems="center">
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="lock_clock"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {" "}
+                  Fecha fin registro:{" "}
+                  {new Date(
+                    values.torneo.fecha_fin_registro
+                  ).toLocaleDateString()}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="access_time"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  {" "}
+                  Hora de inicio: {`${values.torneo.hora_inicio}:00`}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="emoji_events"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  Premio:{" "}
+                  {values.torneo.premio
+                    ? values.torneo.desc_premio
+                    : "Sin premio"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="sports_esports"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={textStyle} variant="h5">
+                  No. total de enfrentamientos:{" "}
+                  {values.torneo.no_enfrentamientos}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid xs={12} md={12} item container>
+              <Grid item xs={12} xl={1}>
+                <MaterialIcon size="large" icon="qr_code"></MaterialIcon>
+              </Grid>
+              <Grid item xs={12} xl={11}>
+                <Typography sx={{ color: "white" }} variant="h5">
+                  Código de Torneo: {values.torneo.codigo_torneo}
+                  <CopyToClipboard
+                    open={openClipboard}
+                    setOpen={setOpenClipboard}
+                    copy={values.torneo.codigo_torneo}
+                  ></CopyToClipboard>
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      {ganador && (
         <Grid
           item
           container
-          justifyContent={"start"}
-          xs={12}
+          justifyContent="center"
           direction="row"
+          alignItems="center"
           sx={{
-            display: "flex",
-            px: 0.3,
-            alignItems: "center",
-            width: "fit-content",
-            border: `1px solid ${COLORS.secondary.main}`,
-            borderRadius: 1,
-            bgcolor: COLORS.primary.main,
-            color: "black",
-            "& svg": {
-              m: 0.5,
-            },
-            "& hr": {
-              mx: 0.5,
-            },
+            backgroundColor: "#d4af37",
+            p: 5,
+            borderRadius: 5,
           }}
         >
-          <Grid item sx={{ px: 0.5 }}>
-            <Typography sx={{ color: "white" }} variant="span">
-              {values.torneo.description}
+          <Grid item>
+            <MaterialIcon size="large" icon="emoji_events"></MaterialIcon>
+          </Grid>
+          <Grid item>
+            <Typography
+              sx={{ color: "black", fontWeight: "bold" }}
+              variant="h5"
+            >
+              Ganador: {ganador.nombre}
             </Typography>
           </Grid>
-          <Divider
-            sx={{ background: COLORS.secondary.main }}
-            orientation="vertical"
-            variant="middle"
-            flexItem
-          />
-          <Grid item sx={{ px: 0.5 }}>
-            <Typography sx={{ color: "white" }} variant="span">
-              {" "}
-              Fecha inicio:{" "}
-              {new Date(values.torneo.fecha_inicio).toLocaleDateString()}
-            </Typography>
-          </Grid>
-          <Divider
-            sx={{ background: COLORS.secondary.main }}
-            orientation="vertical"
-            variant="middle"
-            flexItem
-          />
-          <Grid item sx={{ px: 0.5 }}>
-            <Typography sx={{ color: "white" }} variant="span">
-              {" "}
-              Fecha fin registro:{" "}
-              {new Date(values.torneo.fecha_fin_registro).toLocaleDateString()}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-      {ganador && (
-        <Grid item container justifyContent="center" direction="row">
-          <Typography sx={{ color: "white" }} variant="h5">
-            Ganador: {ganador.nombre}
-          </Typography>
         </Grid>
       )}
-      <Grid item container justifyContent="start">
-        <Grid item xs={12}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleBitacoraEquipo}
-          >
-            Ver bitacora de torneo.
-          </Button>
-        </Grid>
-      </Grid>
+
       <Grid
-        sx={{ width: "80vw" }}
+        sx={{
+          width: "80vw",
+          backgroundColor: "#1a3650",
+          p: 5,
+          mt: 3,
+          borderRadius: 5,
+        }}
         xs={12}
         item
         container
         justifyContent="center"
         direction="column"
       >
-        <Typography sx={{ color: "white", mt: 5 }} variant="h4">
+        <Typography sx={{ color: "white" }} variant="h4">
           Participantes{" "}
         </Typography>
         <TableContainer>
@@ -286,7 +362,16 @@ const DashboardOrganizadorVerTorneoTFT = ({ idTorneo }) => {
         </TableContainer>
       </Grid>
       {values?.torneo?.id_estado >= 1 && (
-        <Grid container item>
+        <Grid
+          container
+          item
+          sx={{
+            backgroundColor: "#1a3650",
+            p: 5,
+            mt: 3,
+            borderRadius: 5,
+          }}
+        >
           <Grid item sx={{ my: 5 }} xs={12}>
             <Typography sx={{ color: "white" }} variant="h4">
               Enfrentamientos{" "}
