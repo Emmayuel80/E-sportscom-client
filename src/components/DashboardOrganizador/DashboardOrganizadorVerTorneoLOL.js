@@ -73,7 +73,7 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
       idEquipo = partidaSeleccionada.id_equipo1;
     }
     if (equipoSeleccionado !== -1 && equipoSeleccionado === 2) {
-      idEquipo = partidaSeleccionada.id_equipo1;
+      idEquipo = partidaSeleccionada.id_equipo2;
     }
     registrarResultadoLoL(
       user.token,
@@ -484,7 +484,7 @@ const DashboardOrganizadorVerTorneoLOL = ({ idTorneo }) => {
                                 >
                                   <Avatar
                                     sx={{ width: 64, height: 64 }}
-                                    src={partida.equipo2.logo2}
+                                    src={partida.logo2}
                                     variant="rounded"
                                     aria-label="recipe"
                                   ></Avatar>
